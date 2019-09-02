@@ -10,7 +10,7 @@ source:
   sha256: d7dd5f164e1e51d2dcb8c7d927b99f6ac1d0f8de4a665bd9daee1a14864c30ae
 
 build:
-  number: 0
+  number: 2
   skip: True  # [not linux]
 
 requirements:
@@ -26,9 +26,7 @@ requirements:
     - python 
   host:
     - libblas
-    - libcblas
     - liblapack
-    - liblapacke
 
 test:
   commands:
