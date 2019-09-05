@@ -10,7 +10,7 @@ source:
   sha256: d7dd5f164e1e51d2dcb8c7d927b99f6ac1d0f8de4a665bd9daee1a14864c30ae
 
 build:
-  number: 2
+  number: 3
   skip: True  # [not linux]
 
 requirements:
@@ -49,3 +49,4 @@ about:
 extra:
   recipe-maintainers:
     - jan-janssen
+    - oschuett
