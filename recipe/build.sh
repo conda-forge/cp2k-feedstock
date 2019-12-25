@@ -1,6 +1,5 @@
 #!/bin/bash
 cp /home/conda/recipe_root/Linux-x86-64-conda.sopt arch/Linux-x86-64-conda.sopt
-cd makefiles
 make -j${CPU_COUNT} ARCH=Linux-x86-64-conda VERSION=sopt
 make -j${CPU_COUNT} ARCH=Linux-x86-64-conda VERSION=sopt test
 cd ${SRC_DIR}
