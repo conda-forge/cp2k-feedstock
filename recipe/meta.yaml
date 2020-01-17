@@ -6,7 +6,7 @@ package:
   version: {{ version }}
 
 source:
-  url: https://github.com/{{ name }}/{{ name }}/archive/v{{ version }}.tar.gz
+  url: https://github.com/cp2k/cp2k/releases/download/v{{ version }}/cp2k-{{ version[:-2] }}.tar.bz2
   sha256: e244f76d7e1e98da7e4e4b2e6cefb723fa1205cfae4f94739413be74952e8b4e
 
 build:
