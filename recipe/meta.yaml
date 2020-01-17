@@ -1,16 +1,16 @@
 {% set name = "cp2k" %}
-{% set version = "6.1.0" %}
+{% set version = "7.1.0" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  url: https://github.com/{{ name }}/{{ name }}/archive/v{{ version }}.tar.gz
-  sha256: d7dd5f164e1e51d2dcb8c7d927b99f6ac1d0f8de4a665bd9daee1a14864c30ae
+  url: https://github.com/{{ name }}/{{ name }}/releases/download/v{{ version }}/{{ name }}-{{ version[:-2] }}.tar.bz2
+  sha256: ccd711a09a426145440e666310dd01cc5772ab103493c4ae6a3470898cd0addb
 
 build:
-  number: 3
+  number: 0
   skip: True  # [not linux]
 
 requirements:
