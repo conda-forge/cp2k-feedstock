@@ -20,3 +20,9 @@ libblas:
 - 3.8 *netlib
 liblapack:
 - 3.8.0 *netlib
+target_platform:
+- linux-64
+zip_keys:
+- - c_compiler_version
+  - cxx_compiler_version
+  - fortran_compiler_version
