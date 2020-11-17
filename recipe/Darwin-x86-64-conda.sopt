@@ -12,7 +12,7 @@
 # FFLAGS=-march=core2 -mtune=haswell -ftree-vectorize -fPIC -fstack-protector -O2 -pipe -isystem $PREFIX/include -fdebug-prefix-map=$SRC_DIR=/usr/local/src/conda/cp2k-7.1.0 -fdebug-prefix-map=$PREFIX=/usr/local/src/conda-prefix
 
 CPP         = $(CC)-cpp
-CPPFLAGS    = $(CPPFLAGS) -C -P -traditional -D__NO_IPI_DRIVER -nostdinc
-AR          = $(AR) -r
+#CPPFLAGS  += -C -P -traditional -D__NO_IPI_DRIVER -nostdinc
+#AR         += $(AR) -r
 FCFLAGS     = $(FFLAGS) -ffree-form
 LIBS        = -llapack -lblas
