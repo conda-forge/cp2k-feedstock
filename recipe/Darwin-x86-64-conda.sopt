@@ -1,0 +1,18 @@
+# Minimal arch file for CP2K, with minimal dependencies.
+# With this setup, all of CP2K can be pasted together in a single .f90 file:
+# https://www.dropbox.com/s/18oi02srbot3h9p/cp2k_single_file.f90.gz
+#
+#
+# Environment variables are set automatically, e.g.
+# CC=x86_64-apple-darwin13.4.0-clang
+# CXX=x86_64-apple-darwin13.4.0-clang++
+# AR=$BUILD_PREFIX/bin/x86_64-apple-darwin13.4.0-ar
+# FC=$BUILD_PREFIX/bin/x86_64-apple-darwin13.4.0-gfortran
+# LD=$BUILD_PREFIX/bin/x86_64-apple-darwin13.4.0-ld
+# FFLAGS=-march=core2 -mtune=haswell -ftree-vectorize -fPIC -fstack-protector -O2 -pipe -isystem $PREFIX/include -fdebug-prefix-map=$SRC_DIR=/usr/local/src/conda/cp2k-7.1.0 -fdebug-prefix-map=$PREFIX=/usr/local/src/conda-prefix
+
+CPP         = $(CC)-cpp
+CPPFLAGS    = $(CPPFLAGS) -C -P -traditional -D__NO_IPI_DRIVER -nostdinc
+AR          = $(AR) -r
+FCFLAGS     = $(FFLAGS) -ffree-form
+LIBS        = -llapack -lblas
