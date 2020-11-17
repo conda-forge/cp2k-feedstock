@@ -13,6 +13,6 @@
 
 CPP         = $(CC)-cpp
 #CPPFLAGS  += -C -P -traditional -D__NO_IPI_DRIVER -nostdinc
-#AR         += $(AR) -r
+AR         += -r
 FCFLAGS     = $(FFLAGS) -ffree-form
 LIBS        = -llapack -lblas
