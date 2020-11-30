@@ -21,4 +21,4 @@ LIBS        = -llapack -lblas
 # this is what is set:
 # LDFLAGS=-Wl,-pie -Wl,-headerpad_max_install_names -Wl,-dead_strip_dylibs -Wl,-rpath,$PREFIX/lib -L$PREFIX/lib
 # LDFLAGS_LD=-pie -headerpad_max_install_names -dead_strip_dylibs -rpath $PREFIX/lib -L$PREFIX/lib
-LDFLAGS    = $(LDFLAGS_LD)
+LDFLAGS    = $(LDFLAGS_LD) -lgfortran
