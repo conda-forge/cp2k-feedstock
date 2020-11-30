@@ -1,7 +1,4 @@
-# Minimal arch file for CP2K, with minimal dependencies.
-# With this setup, all of CP2K can be pasted together in a single .f90 file:
-# https://www.dropbox.com/s/18oi02srbot3h9p/cp2k_single_file.f90.gz
-#
+# Inspiration from https://github.com/cp2k/cp2k/blob/master/arch/Darwin-IntelMacintosh-gfortran.sdbg
 #
 # Environment variables are set automatically, e.g.
 # CC=x86_64-apple-darwin13.4.0-clang
@@ -14,8 +11,10 @@
 CPP         = $(CC)-cpp
 #CPPFLAGS  += -C -P -traditional -D__NO_IPI_DRIVER -nostdinc
 AR         += -r
-FCFLAGS     = $(FFLAGS) -ffree-form
-LIBS        = -llapack -lblas
+DFLAGS = -D__NO_STATM_ACCESS -D__ACCELERATE #-D__LIBXC -D__LIBINT
+FCFLAGS     = $(FFLAGS) -ffree-form $(DFLAGS)
+#LIBS        = -llapack -lblas
+LIBS        = -framework Accelerate
 
 # using the default LDFLAGS set by conda yielded an error
 # this is what is set:
