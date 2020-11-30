@@ -12,6 +12,7 @@ fi
 # make
 cp ${RECIPE_DIR}/${ARCH}.${VERSION} arch/${ARCH}.${VERSION}
 make -j${CPU_COUNT} ARCH=${ARCH} VERSION=${VERSION}
+make -j${CPU_COUNT} ARCH=${ARCH} VERSION=${VERSION} test
 
 # install
 cd ${SRC_DIR}
