@@ -1,23 +1,26 @@
-# Inspiration from https://github.com/cp2k/cp2k/blob/master/arch/Darwin-IntelMacintosh-gfortran.sdbg
+# CP2K ARCH file for build on conda-forge (MS Azure runners)
+# with inspiration from https://github.com/cp2k/cp2k/blob/master/arch/Darwin-IntelMacintosh-gfortran.sdbg
 #
-# Environment variables are set automatically, e.g.
+## A selection of environment variables set by conda (as of 2020-12-03):
 # CC=x86_64-apple-darwin13.4.0-clang
 # CXX=x86_64-apple-darwin13.4.0-clang++
+# CPPFLAGS=-D_FORTIFY_SOURCE=2 -isystem $PREFIX/include -mmacosx-version-min=10.9
 # AR=$BUILD_PREFIX/bin/x86_64-apple-darwin13.4.0-ar
 # FC=$BUILD_PREFIX/bin/x86_64-apple-darwin13.4.0-gfortran
 # LD=$BUILD_PREFIX/bin/x86_64-apple-darwin13.4.0-ld
 # FFLAGS=-march=core2 -mtune=haswell -ftree-vectorize -fPIC -fstack-protector -O2 -pipe -isystem $PREFIX/include -fdebug-prefix-map=$SRC_DIR=/usr/local/src/conda/cp2k-7.1.0 -fdebug-prefix-map=$PREFIX=/usr/local/src/conda-prefix
+# LDFLAGS=-Wl,-pie -Wl,-headerpad_max_install_names -Wl,-dead_strip_dylibs -Wl,-rpath,$PREFIX/lib -L$PREFIX/lib
+# LDFLAGS_LD=-pie -headerpad_max_install_names -dead_strip_dylibs -rpath $PREFIX/lib -L$PREFIX/lib
+#
+## Notes
+# * no libxc / libint support (could be added)
 
 CPP         = $(CC)-cpp
 #CPPFLAGS  += -C -P -traditional -D__NO_IPI_DRIVER -nostdinc
 AR         += -r
-DFLAGS = -D__NO_STATM_ACCESS -D__ACCELERATE #-D__LIBXC -D__LIBINT
-FCFLAGS     = $(FFLAGS) -ffree-form $(DFLAGS)
-#LIBS        = -llapack -lblas
-LIBS        = -framework Accelerate
+DFLAGS = -D__NO_STATM_ACCESS -D__ACCELERATE
+FCFLAGS     = $(FFLAGS) -ffree-form $(DFLAGS) -fbacktrace
+LIBS        = -framework Accelerate  # -llapack -lblas
 
-# using the default LDFLAGS set by conda yielded an error
-# this is what is set:
-# LDFLAGS=-Wl,-pie -Wl,-headerpad_max_install_names -Wl,-dead_strip_dylibs -Wl,-rpath,$PREFIX/lib -L$PREFIX/lib
-# LDFLAGS_LD=-pie -headerpad_max_install_names -dead_strip_dylibs -rpath $PREFIX/lib -L$PREFIX/lib
+# Using the default LDFLAGS set by conda yielded an error; thus using $LDFLAGS_LD
 LDFLAGS    = $(LDFLAGS_LD) -lgfortran -lc

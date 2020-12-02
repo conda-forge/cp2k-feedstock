@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # select ARCH file and version
-if [[ "$MACOSX_DEPLOYMENT_TARGET" == "10.9" ]]; then
+if [[ ! -z "$MACOSX_DEPLOYMENT_TARGET" ]]; then
   ARCH=Darwin-x86-64-conda
   VERSION=sopt
 else
