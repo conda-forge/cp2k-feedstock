@@ -8,6 +8,8 @@ package:
 source:
   url: https://github.com/{{ name }}/{{ name }}/releases/download/v{{ version }}/{{ name }}-{{ version[:-2] }}.tar.bz2
   sha256: ccd711a09a426145440e666310dd01cc5772ab103493c4ae6a3470898cd0addb
+  patches: 
+    - regtest.patch
 
 build:
   number: 2
