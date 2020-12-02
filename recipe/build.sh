@@ -4,6 +4,7 @@
 if [[ "$MACOSX_DEPLOYMENT_TARGET" == "10.9" ]]; then
   ARCH=Darwin-x86-64-conda
   VERSION=sopt
+  alias nproc="sysctl -n hw.logicalcpu"
 else
   ARCH=Linux-x86-64-conda
   VERSION=sopt
