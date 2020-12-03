@@ -1,0 +1,28 @@
+From 54c710653dbaa60e3146f76b264534f13ef58b34 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Tiziano=20M=C3=BCller?= <tiziano.mueller@chem.uzh.ch>
+Date: Wed, 2 Dec 2020 09:11:49 +0100
+Subject: [PATCH] regtest: remove deprecated options completely
+
+should help with conda-forge/cp2k-feedstock#7
+---
+ tools/regtesting/do_regtest | 7 -------
+ 1 file changed, 7 deletions(-)
+
+diff --git a/tools/regtesting/do_regtest b/tools/regtesting/do_regtest
+index f7e8d9d69f..8b265eda49 100755
+--- a/tools/regtesting/do_regtest
++++ b/tools/regtesting/do_regtest
+@@ -162,13 +162,6 @@ while [ $# -ge 1 ]; do
+   echo ""
+   echo "For more information visit: <http://cp2k.org/dev:regtesting>"
+   exit 0;;
+- -svndate|-svnrev)
+-  shift;&
+- -nogit|-nosvn|-noemptycheck)
+-  echo "WARNING: The following flags have been removed and will now be ignored:"
+-  echo "         -nogit, -nosvn, -noemptycheck, -svndate, -svnrev"
+-  echo "         This warning will soon be converted into an error, please remove them from your script invocation."
+-  ;;
+  # stop on invalid flag
+  -*)
+   echo "ERROR: Invalid command line flag $1 found"

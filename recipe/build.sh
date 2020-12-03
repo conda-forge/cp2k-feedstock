@@ -1,8 +1,21 @@
 #!/bin/bash
-cp /home/conda/recipe_root/Linux-x86-64-conda.sopt arch/Linux-x86-64-conda.sopt
-make -j${CPU_COUNT} ARCH=Linux-x86-64-conda VERSION=sopt
-make -j${CPU_COUNT} ARCH=Linux-x86-64-conda VERSION=sopt test
+
+# select ARCH file and version
+if [[ ! -z "$MACOSX_DEPLOYMENT_TARGET" ]]; then
+  ARCH=Darwin-x86-64-conda
+  VERSION=sopt
+else
+  ARCH=Linux-x86-64-conda
+  VERSION=sopt
+fi
+
+# make
+cp ${RECIPE_DIR}/${ARCH}.${VERSION} arch/${ARCH}.${VERSION}
+make -j${CPU_COUNT} ARCH=${ARCH} VERSION=${VERSION}
+make -j${CPU_COUNT} ARCH=${ARCH} VERSION=${VERSION} test
+
+# install
 cd ${SRC_DIR}
 mkdir ${PREFIX}/bin
-cp exe/Linux-x86-64-conda/cp2k.sopt ${PREFIX}/bin/cp2k.sopt
-cp exe/Linux-x86-64-conda/cp2k_shell.sopt ${PREFIX}/bin/cp2k_shell.sopt
+cp exe/${ARCH}/cp2k.${VERSION} ${PREFIX}/bin/cp2k.${VERSION}
+cp exe/${ARCH}/cp2k_shell.${VERSION} ${PREFIX}/bin/cp2k_shell.${VERSION}

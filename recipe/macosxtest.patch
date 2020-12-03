@@ -1,0 +1,22 @@
+From 33054d26539b40a6159774862a9d1b963be5c6db Mon Sep 17 00:00:00 2001
+From: Jan Janssen <jan-janssen@users.noreply.github.com>
+Date: Wed, 2 Dec 2020 17:28:19 +0100
+Subject: [PATCH] Update do_regtest
+
+---
+ tools/regtesting/do_regtest | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/regtesting/do_regtest b/tools/regtesting/do_regtest
+index 49354922b0..9ff380833c 100755
+--- a/tools/regtesting/do_regtest
++++ b/tools/regtesting/do_regtest
+@@ -206,7 +206,7 @@ farming=${farming:-"no"}
+ # guessing the number of tasks / threads / ranks
+ #
+ # by default we use all available processors, obeys e.g. docker --cpuset-cpus
+-maxtasksdefault=`nproc`
++maxtasksdefault=`sysctl -n hw.logicalcpu`
+ maxtasks=${maxtasks:-${maxtasksdefault}}
+ maxbuildtasks=${maxbuildtasks:-${maxtasks}}
+ 
