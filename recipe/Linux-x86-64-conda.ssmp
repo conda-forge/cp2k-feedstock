@@ -9,4 +9,5 @@ AR          = $(BUILD_PREFIX)/bin/x86_64-conda_cos6-linux-gnu-ar -r
 FC          = $(BUILD_PREFIX)/bin/x86_64-conda_cos6-linux-gnu-gfortran
 LD          = $(BUILD_PREFIX)/bin/x86_64-conda_cos6-linux-gnu-gfortran
 FCFLAGS     = -ffree-form -fopenmp
+LDFLAGS     = -lgomp
 LIBS        = -llapack -lblas

@@ -23,4 +23,4 @@ FCFLAGS     = $(FFLAGS) -ffree-form $(DFLAGS) -fbacktrace -fopenmp
 LIBS        = -framework Accelerate
 
 # Using the default LDFLAGS set by conda yielded an error; thus using $LDFLAGS_LD
-LDFLAGS    = $(LDFLAGS_LD) -lgfortran -lc
+LDFLAGS    = $(LDFLAGS_LD) -lgfortran -lc -lgomp
