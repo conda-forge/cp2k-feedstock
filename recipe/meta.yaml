@@ -13,8 +13,8 @@ source:
     - macosxtest.patch  # [osx]
 
 build:
-  number: 2
-  skip: True  # [not (linux or osx) ]
+  number: 3
+  skip: True  # [not win ]
 
 requirements:
   build:

@@ -1,0 +1,52 @@
+# CP2K ARCH file for build on conda-forge (MS Azure runners)
+# with inspiration from https://github.com/cp2k/cp2k/blob/master/arch/Linux-x86-64-mingw64-minimal.sopt
+#
+## A selection of environment variables set by conda (as of 2020-12-03):
+# CC=x86_64-apple-darwin13.4.0-clang
+# CXX=x86_64-apple-darwin13.4.0-clang++
+# CPPFLAGS=-D_FORTIFY_SOURCE=2 -isystem $PREFIX/include -mmacosx-version-min=10.9
+# AR=$BUILD_PREFIX/bin/x86_64-apple-darwin13.4.0-ar
+# FC=$BUILD_PREFIX/bin/x86_64-apple-darwin13.4.0-gfortran
+# LD=$BUILD_PREFIX/bin/x86_64-apple-darwin13.4.0-ld
+# FFLAGS=-march=core2 -mtune=haswell -ftree-vectorize -fPIC -fstack-protector -O2 -pipe -isystem $PREFIX/include -fdebug-prefix-map=$SRC_DIR=/usr/local/src/conda/cp2k-7.1.0 -fdebug-prefix-map=$PREFIX=/usr/local/src/conda-prefix
+# LDFLAGS=-Wl,-pie -Wl,-headerpad_max_install_names -Wl,-dead_strip_dylibs -Wl,-rpath,$PREFIX/lib -L$PREFIX/lib
+# LDFLAGS_LD=-pie -headerpad_max_install_names -dead_strip_dylibs -rpath $PREFIX/lib -L$PREFIX/lib
+#
+## Notes
+# * no libxc / libint support (could be added)
+
+
+CPP         = $(CC)-cpp
+#CPPFLAGS  += -C -P -traditional -D__NO_IPI_DRIVER -nostdinc
+AR         += -r
+DFLAGS = -D__NO_STATM_ACCESS -D__ACCELERATE
+FCFLAGS     = $(FFLAGS) -ffree-form $(DFLAGS) -fbacktrace -fopenmp
+LIBS        = -framework Accelerate
+
+# Using the default LDFLAGS set by conda yielded an error; thus using $LDFLAGS_LD
+LDFLAGS    = $(LDFLAGS_LD) -lgfortran -lc
+
+
+
+# This configuration was tested on a Centos 7 with the EPEL repository configured
+# and a Fedora 29 Docker image with the following packages installed:
+#   mingw64-gcc-gfortran mingw64-gcc-c++ mingw64-winpthreads-static
+# OpenBLAS was built with the following command:
+#   make BINARY=64 CC=x86_64-w64-mingw32-gcc FC=x86_64-w64-mingw32-gfortran HOSTCC=gcc TARGET=CORE2
+# The result is a minimal standalone binary running on Windows when built with
+#   make OPENBLAS_LIBPATH=<path to OpenBLAS> ARCH=Linux-x86-64-mingw64-minimal VERSION=sopt
+# If you do not have a Fedora or Centos yet but have Docker, you can use the following two commands
+# to build CP2K via a Fedora Docker container:
+#   docker build -f tools/docker/Dockerfile.build_mingw64 -t cp2k/mingw64:latest tools/docker
+#   docker run --rm -v $(pwd):/cp2k --user $(id -u):$(id -g) cp2k/mingw64
+CC          = x86_64-w64-mingw32-gcc
+CXX         = x86_64-w64-mingw32-g++
+FC          = x86_64-w64-mingw32-gfortran
+LD          = x86_64-w64-mingw32-gfortran
+AR          = x86_64-w64-mingw32-ar -r
+DFLAGS      = -D__NO_STATM_ACCESS -D__NO_IPI_DRIVER -D__MINGW
+CFLAGS      = $(DFLAGS) -O2
+FCFLAGS     = $(DFLAGS) -O2 -ffree-form -ffree-line-length-none \
+              -ftree-vectorize -funroll-loops -std=f2008
+LDFLAGS     = $(FCFLAGS) -static
+LIBS	    = $(OPENBLAS_LIBPATH)/libopenblas.a
