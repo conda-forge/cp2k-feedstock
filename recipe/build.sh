@@ -3,11 +3,12 @@
 # select ARCH file and version
 if [[ ! -z "$MACOSX_DEPLOYMENT_TARGET" ]]; then
   ARCH=Darwin-x86-64-conda
-  VERSION=sopt
 else
   ARCH=Linux-x86-64-conda
-  VERSION=sopt
 fi
+
+# cp2k >= 8.1 will only support openmp-enabled versions
+VERSION=ssmp
 
 # make
 cp ${RECIPE_DIR}/${ARCH}.${VERSION} arch/${ARCH}.${VERSION}

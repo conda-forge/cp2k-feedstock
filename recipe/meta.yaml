@@ -13,7 +13,7 @@ source:
     - macosxtest.patch  # [osx]
 
 build:
-  number: 2
+  number: 3
   skip: True  # [not (linux or osx) ]
 
 requirements:
@@ -53,3 +53,4 @@ extra:
   recipe-maintainers:
     - jan-janssen
     - oschuett
+    - ltalirz

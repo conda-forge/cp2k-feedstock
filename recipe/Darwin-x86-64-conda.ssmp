@@ -19,8 +19,8 @@ CPP         = $(CC)-cpp
 #CPPFLAGS  += -C -P -traditional -D__NO_IPI_DRIVER -nostdinc
 AR         += -r
 DFLAGS = -D__NO_STATM_ACCESS -D__ACCELERATE
-FCFLAGS     = $(FFLAGS) -ffree-form $(DFLAGS) -fbacktrace
-LIBS        = -framework Accelerate  # -llapack -lblas
+FCFLAGS     = $(FFLAGS) -ffree-form $(DFLAGS) -fbacktrace -fopenmp
+LIBS        = -framework Accelerate
 
 # Using the default LDFLAGS set by conda yielded an error; thus using $LDFLAGS_LD
 LDFLAGS    = $(LDFLAGS_LD) -lgfortran -lc
