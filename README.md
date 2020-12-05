@@ -150,5 +150,6 @@ Feedstock Maintainers
 =====================
 
 * [@jan-janssen](https://github.com/jan-janssen/)
+* [@ltalirz](https://github.com/ltalirz/)
 * [@oschuett](https://github.com/oschuett/)
 
