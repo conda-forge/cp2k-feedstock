@@ -22,5 +22,5 @@ DFLAGS      = -D__NO_STATM_ACCESS -D__ACCELERATE
 FCFLAGS     = $(FFLAGS) -ffree-form $(DFLAGS) -fbacktrace -fopenmp
 LIBS        = -framework Accelerate
 
-# Using the default LDFLAGS set by conda yielded an error; thus using $LDFLAGS_LD
+# Using LDFLAGS_LD since cp2k passes the LDFLAGS directly to the linker
 LDFLAGS     = $(LDFLAGS_LD) -lgfortran -lc -lgomp

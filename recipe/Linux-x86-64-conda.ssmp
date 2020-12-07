@@ -20,4 +20,6 @@ AR          = $(GCC_AR) -r
 CPPFLAGS   += -C -P -traditional -D__NO_IPI_DRIVER -nostdinc
 FCFLAGS     = $(FFLAGS) -ffree-form -fopenmp
 LIBS        = -llapack -lblas
+# It seems gcc is missing the LDFLAGS_LD environment variable, so we translate LDFLAGS manually
+LDFLAGS     = -O2 --sort-common --as-needed -z,relro -z,now --disable-new-dtags --gc-sections -rpath,$PREFIX/lib -rpath-link,$PREFIX/lib -L$PREFIX/lib
 LDFLAGS    += -lgomp -lgfortran
