@@ -16,11 +16,11 @@
 # * no libxc / libint support (could be added)
 
 CPP         = $(CC)-cpp
-#CPPFLAGS  += -C -P -traditional -D__NO_IPI_DRIVER -nostdinc
+CPPFLAGS   += -C -P -traditional -D__NO_IPI_DRIVER -nostdinc
 AR         += -r
-DFLAGS = -D__NO_STATM_ACCESS -D__ACCELERATE
+DFLAGS      = -D__NO_STATM_ACCESS -D__ACCELERATE
 FCFLAGS     = $(FFLAGS) -ffree-form $(DFLAGS) -fbacktrace -fopenmp
 LIBS        = -framework Accelerate
 
 # Using the default LDFLAGS set by conda yielded an error; thus using $LDFLAGS_LD
-LDFLAGS    = $(LDFLAGS_LD) -lgfortran -lc -lgomp
+LDFLAGS     = $(LDFLAGS_LD) -lgfortran -lc -lgomp
