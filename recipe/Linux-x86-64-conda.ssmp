@@ -20,9 +20,7 @@ AR          = $(GCC_AR) -r
 CPPFLAGS   += -C -P -traditional -D__NO_IPI_DRIVER -nostdinc
 FCFLAGS     = $(FFLAGS) -ffree-form -fopenmp
 LIBS        = -llapack -lblas
-LD          = $(CC)
-# Note: we're using gcc as the linker since the conda linux environment is missing the
-# LDFLAGS_LD variable (available on osx) that contains the linker flags in a form that can be
-# passed directly to ld. 
-# Thus, we need to add -Wl, here as well
-LDFLAGS    += -Wl,-lgomp -Wl,-lgfortran
+# Since LDFLAGS_LD is missing, we translate part of the LDFLAGS to be passed to ld
+# This is not ideal, since we will miss changes in the environment variables
+LDFLAGS     =  -O2 --sort-common --as-needed -z relro -z now --disable-new-dtags --gc-sections -rpath $(PREFIX)/lib -rpath-link $(PREFIX)/lib -L$(PREFIX)/lib
+LDFLAGS    += -lgomp -lgfortran
