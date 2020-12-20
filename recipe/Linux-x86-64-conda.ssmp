@@ -23,4 +23,4 @@ LIBS        = -llapack -lblas
 # Since LDFLAGS_LD is missing, we translate part of the LDFLAGS to be passed to ld
 # This is not ideal, since we will miss changes in the environment variables
 LDFLAGS     =  -O2 --sort-common -z relro -z now --disable-new-dtags --gc-sections -rpath $(PREFIX)/lib -rpath-link $(PREFIX)/lib -L$(PREFIX)/lib
-LDFLAGS    += -lgomp -lgfortran
+LDFLAGS    += -lgfortran -lc -lgomp 
