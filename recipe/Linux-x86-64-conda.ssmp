@@ -25,4 +25,4 @@ LIBS        = -llapack -lblas
 #LDFLAGS     =  -O2 --sort-common -z relro -z now --disable-new-dtags --gc-sections -rpath $(PREFIX)/lib -rpath-link $(PREFIX)/lib -L$(PREFIX)/lib
 #LDFLAGS    += -lgfortran -lgcc -lc -lm -lgomp 
 LD          = $(FC)
-LDFLAGS    += -Wl,-lgomp
+LDFLAGS    += -fopenmp -Wl,-lgomp
