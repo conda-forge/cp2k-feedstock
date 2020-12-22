@@ -2,7 +2,8 @@
 set -e
 
 # try limiting memory usage
-export OMP_NUM_THREADS=1
+OMP_NUM_THREADS=1
+export OMP_NUM_THREADS
 
 # select ARCH file and version
 if [[ ! -z "$MACOSX_DEPLOYMENT_TARGET" ]]; then
