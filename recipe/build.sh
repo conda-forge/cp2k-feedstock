@@ -1,10 +1,6 @@
 #!/bin/bash
 set -e
 
-# try limiting memory usage
-OMP_NUM_THREADS=1
-export OMP_NUM_THREADS
-
 # select ARCH file and version
 if [[ ! -z "$MACOSX_DEPLOYMENT_TARGET" ]]; then
   ARCH=Darwin-x86-64-conda
@@ -17,7 +13,12 @@ VERSION=ssmp
 # make
 cp ${RECIPE_DIR}/${ARCH}.${VERSION} arch/${ARCH}.${VERSION}
 make -j${CPU_COUNT} ARCH=${ARCH} VERSION=${VERSION}
-make -j${CPU_COUNT} ARCH=${ARCH} VERSION=${VERSION} test
+
+# run regression tests
+# Use built-in threading for regtests to limit memory usage (encountered SIGABORT otherwise)
+OMP_NUM_THREADS=${CPU_COUNT}
+export OMP_NUM_THREADS
+make ARCH=${ARCH} VERSION=${VERSION} test
 
 # install
 cd ${SRC_DIR}
