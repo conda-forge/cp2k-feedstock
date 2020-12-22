@@ -1,7 +1,8 @@
 #!/bin/bash
 set -e
 
-ulimit -s unlimited
+# try limiting memory usage
+export OMP_NUM_THREADS=1
 
 # select ARCH file and version
 if [[ ! -z "$MACOSX_DEPLOYMENT_TARGET" ]]; then
