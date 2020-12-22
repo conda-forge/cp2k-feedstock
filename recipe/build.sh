@@ -1,4 +1,7 @@
 #!/bin/bash
+set -e
+
+ulimit -s unlimited
 
 # select ARCH file and version
 if [[ ! -z "$MACOSX_DEPLOYMENT_TARGET" ]]; then
