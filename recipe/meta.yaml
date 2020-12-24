@@ -13,7 +13,7 @@ source:
     - macosxtest.patch  # [osx]
 
 build:
-  number: 2
+  number: 3
   skip: True  # [not (linux or osx) ]
 
 requirements:
@@ -21,6 +21,8 @@ requirements:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - {{ compiler('fortran') }}
+    - llvm-openmp  # [osx]
+    - libgomp  # [linux]
     - make
     - autoconf
     - automake
@@ -33,7 +35,7 @@ requirements:
 
 test:
   commands:
-    - cp2k.sopt --help
+    - cp2k.ssmp --help
 
 about:
   home: https://www.cp2k.org
@@ -53,3 +55,4 @@ extra:
   recipe-maintainers:
     - jan-janssen
     - oschuett
+    - ltalirz
