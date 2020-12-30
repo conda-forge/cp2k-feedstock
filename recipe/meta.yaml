@@ -1,5 +1,5 @@
 {% set name = "cp2k" %}
-{% set version = "7.1.0" %}
+{% set version = "8.1.0" %}
 
 package:
   name: {{ name|lower }}
@@ -7,14 +7,14 @@ package:
 
 source:
   url: https://github.com/{{ name }}/{{ name }}/releases/download/v{{ version }}/{{ name }}-{{ version[:-2] }}.tar.bz2
-  sha256: ccd711a09a426145440e666310dd01cc5772ab103493c4ae6a3470898cd0addb
-  patches: 
+  sha256: ddf050e34300afa28bdf846f7b391f7e2489b44040535f78d516d9789ff7d010
+  patches:
     - regtest.patch
     - macosxtest.patch  # [osx]
 
 build:
-  number: 3
-  skip: True  # [not (linux or osx) ]
+  number: 0
+  skip: true  # [not (linux or osx)]
 
 requirements:
   build:
@@ -26,9 +26,9 @@ requirements:
     - make
     - autoconf
     - automake
-    - cmake 
+    - cmake
     - libtool
-    - python 
+    - python
   host:
     - libblas
     - liblapack
@@ -42,7 +42,7 @@ about:
   license: GPL-2.0-only
   license_family: GPL
   license_file: LICENSE
-  summary: 'Quantum chemistry and solid state physics software package'
+  summary: Quantum chemistry and solid state physics software package
 
   description: |
     CP2K is a quantum chemistry and solid state physics software package 
