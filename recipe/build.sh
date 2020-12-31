@@ -8,7 +8,7 @@ else
   ARCH=Linux-x86-64-conda
 fi
 
-VERSION=ssmp
+VERSION=psmp
 
 # make
 cp ${RECIPE_DIR}/${ARCH}.${VERSION} arch/${ARCH}.${VERSION}

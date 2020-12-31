@@ -13,7 +13,7 @@ source:
     - macosxtest.patch  # [osx]
 
 build:
-  number: 3
+  number: 4
   skip: True  # [not (linux or osx) ]
 
 requirements:
@@ -21,8 +21,6 @@ requirements:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - {{ compiler('fortran') }}
-    - llvm-openmp  # [osx]
-    - libgomp  # [linux]
     - make
     - autoconf
     - automake
@@ -32,6 +30,9 @@ requirements:
   host:
     - libblas
     - liblapack
+    - llvm-openmp  # [osx]
+    - libgomp  # [linux]
+    - openmpi
 
 test:
   commands:
