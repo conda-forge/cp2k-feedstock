@@ -1,5 +1,6 @@
 {% set name = "cp2k" %}
 {% set version = "7.1.0" %}
+{% set build_string = "py{}_{}_{}".format(environ.get('CONDA_PY', ''), mpi, build) %}
 
 package:
   name: {{ name|lower }}
@@ -15,6 +16,7 @@ source:
 build:
   number: 4
   skip: True  # [not (linux or osx) ]
+  string: {{ build_string }}
 
 requirements:
   build:
@@ -28,11 +30,13 @@ requirements:
     - libtool
     - python 
   host:
+    - {{ mpi }}  # [mpi != 'nompi']
     - libblas
     - liblapack
     - llvm-openmp  # [osx]
     - libgomp  # [linux]
-    - openmpi
+  run:
+    - {{ mpi }}  # [mpi != 'nompi']
 
 test:
   commands:
