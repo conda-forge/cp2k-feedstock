@@ -22,6 +22,8 @@ liblapack:
 - 3.8 *netlib
 macos_machine:
 - x86_64-apple-darwin13.4.0
+mpi:
+- openmpi
 target_platform:
 - osx-64
 zip_keys:
