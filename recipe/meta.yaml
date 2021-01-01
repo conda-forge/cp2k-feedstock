@@ -1,5 +1,6 @@
 {% set name = "cp2k" %}
 {% set version = "7.1.0" %}
+{% set build = 4 %}
 {% set build_string = "py{}_{}_{}".format(environ.get('CONDA_PY', ''), mpi, build) %}
 
 package:
@@ -14,7 +15,7 @@ source:
     - macosxtest.patch  # [osx]
 
 build:
-  number: 4
+  number: {{ build }}
   skip: True  # [not (linux or osx) ]
   string: {{ build_string }}
 
