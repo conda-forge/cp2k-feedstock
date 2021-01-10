@@ -15,10 +15,7 @@ cp ${RECIPE_DIR}/${ARCH}.${VERSION} arch/${ARCH}.${VERSION}
 make -j${CPU_COUNT} ARCH=${ARCH} VERSION=${VERSION}
 
 # run regression tests
-# Use built-in threading for regtests to limit memory usage (encountered SIGABORT otherwise)
-OMP_NUM_THREADS=1
-export OMP_NUM_THREADS
-make ARCH=${ARCH} VERSION=${VERSION} test
+make ARCH=${ARCH} VERSION=${VERSION} TESTOPTS="-ompthreads 1" test
 
 # install
 cd ${SRC_DIR}
