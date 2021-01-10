@@ -15,7 +15,9 @@ cp ${RECIPE_DIR}/${ARCH}.${VERSION} arch/${ARCH}.${VERSION}
 make -j${CPU_COUNT} ARCH=${ARCH} VERSION=${VERSION}
 
 # run regression tests
-make ARCH=${ARCH} VERSION=${VERSION} TESTOPTS="-ompthreads 1" test
+# -mca plm isolated is needed to stop openmpi from looking for ssh
+# See https://github.com/open-mpi/ompi/issues/1838#issuecomment-229914599
+make ARCH=${ARCH} VERSION=${VERSION} TESTOPTS="-ompthreads 1 -mca plm isolated" test
 
 # install
 cd ${SRC_DIR}
