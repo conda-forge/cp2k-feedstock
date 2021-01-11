@@ -1,6 +1,15 @@
 {% set name = "cp2k" %}
 {% set version = "7.1.0" %}
+
+# Define build matrix for MPI vs. non-mpi
+# ensure mpi is defined (needed for conda-smithy recipe-lint)
+{% set mpi = mpi or 'nompi' %}
 {% set build = 4 %}
+{% if mpi == 'nompi' %}
+# prioritize nompi variant via build number
+{% set build = build + 1000 %}
+{% endif %}
+
 {% set build_string = "py{}_{}_{}".format(environ.get('CONDA_PY', ''), mpi, build) %}
 
 package:
@@ -41,7 +50,9 @@ requirements:
 
 test:
   commands:
-    - cp2k.ssmp --help
+    # note: regtests are running at "build" stage
+    # this is just a dummy
+    - cp2k.ssmp --help  # [mpi == 'nompi']
 
 about:
   home: https://www.cp2k.org
