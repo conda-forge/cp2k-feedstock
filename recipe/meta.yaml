@@ -52,7 +52,7 @@ requirements:
     - libxsmm
     - fftw
     - spglib
-    - libxc ==4.3.*
+    - libxc >=5.1
   run:
     - {{ mpi }}  # [mpi != 'nompi']
     - scalapack  # [mpi != 'nompi']
