@@ -18,8 +18,9 @@
 
 AR          = $(GCC_AR) -r
 CPPFLAGS   += -C -P -traditional -D__NO_IPI_DRIVER -nostdinc
+DFLAGS      = -D__FFTW3
 FCFLAGS     = $(FFLAGS) -ffree-form -fopenmp
-LIBS        = -llapack -lblas
+LIBS        = -llapack -lblas -fftw3 -lfftw3_omp
 # Since LDFLAGS_LD is missing, we are linking using gfortran (which can use LDFLAGS)
 LD          = $(FC)
 LDFLAGS    += -fopenmp -Wl,-lgomp
