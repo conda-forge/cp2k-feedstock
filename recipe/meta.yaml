@@ -32,6 +32,7 @@ requirements:
   host:
     - libblas
     - liblapack
+    - libxsmm
     - fftw
 
 test:
