@@ -25,11 +25,10 @@ make -j${CPU_COUNT} ARCH=${ARCH} VERSION=${VERSION}
 if [[ "$mpi" == "nompi" ]]; then
   make ARCH=${ARCH} VERSION=${VERSION} TESTOPTS="-ompthreads 2" test
 else
-  make ARCH=${ARCH} VERSION=${VERSION} TESTOPTS="-ompthreads 1 -mpiexec 'mpiexec --bind-to none -mca plm isolated'" test
-fi
   # -mca plm isolated is needed to stop openmpi from looking for ssh
   # See https://github.com/open-mpi/ompi/issues/1838#issuecomment-229914599
   make ARCH=${ARCH} VERSION=${VERSION} TESTOPTS="-ompthreads 1 -mpiexec 'mpiexec --bind-to none -mca plm isolated'" test
+fi
 
 # install
 cd ${SRC_DIR}
