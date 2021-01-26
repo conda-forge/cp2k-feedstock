@@ -45,10 +45,10 @@ requirements:
     - liblapack
     - llvm-openmp  # [osx]
     - libgomp  # [linux]
-  run:
-    - {{ mpi }}  # [mpi != 'nompi']
     - libxsmm
     - fftw
+  run:
+    - {{ mpi }}  # [mpi != 'nompi']
 
 test:
   commands:
