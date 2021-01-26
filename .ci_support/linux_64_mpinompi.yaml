@@ -14,6 +14,8 @@ cxx_compiler_version:
 - '9'
 docker_image:
 - quay.io/condaforge/linux-anvil-comp7
+fftw:
+- '3'
 fortran_compiler:
 - gfortran
 fortran_compiler_version:
@@ -24,6 +26,9 @@ liblapack:
 - 3.8 *netlib
 mpi:
 - nompi
+pin_run_as_build:
+  fftw:
+    max_pin: x
 target_platform:
 - linux-64
 zip_keys:
