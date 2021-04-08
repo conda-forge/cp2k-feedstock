@@ -15,6 +15,7 @@
 ## Notes
 # * no libxc / libint support (could be added)
 
+FC          = mpifort
 CPP         = $(CC)-cpp
 CPPFLAGS   += -C -P -traditional -D__NO_IPI_DRIVER -nostdinc
 AR         += -r
