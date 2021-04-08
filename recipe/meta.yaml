@@ -41,6 +41,7 @@ requirements:
     - python 
   host:
     - {{ mpi }}  # [mpi != 'nompi']
+    - scalapack  # [mpi != 'nompi']
     - libblas
     - liblapack
     - llvm-openmp  # [osx]
