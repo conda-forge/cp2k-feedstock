@@ -23,6 +23,6 @@ DFLAGS      = -D__NO_STATM_ACCESS -D__ACCELERATE -D__FFTW3 -D__LIBXSMM -D__paral
 FCFLAGS     = $(FFLAGS) -I $(PREFIX)/include -fbacktrace -ffree-form -fimplicit-none -std=f2008 -fopenmp $(DFLAGS)
 LIBS        = -framework Accelerate -lfftw3 -lfftw3_omp -lxsmmf -lxsmm -ldl -lscalapack
 
-# Using LDFLAGS_LD since cp2k passes the LDFLAGS directly to the linker
+# need to use mpifort also for linking
 LD          = $(FC)
-LDFLAGS     = $(LDFLAGS_LD) -lgfortran -lc -lgomp
+LDFLAGS     = $(LDFLAGS) -lgfortran -lc -lgomp
