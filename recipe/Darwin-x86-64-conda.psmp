@@ -24,4 +24,5 @@ FCFLAGS     = $(FFLAGS) -I $(PREFIX)/include -fbacktrace -ffree-form -fimplicit-
 LIBS        = -framework Accelerate -lfftw3 -lfftw3_omp -lxsmmf -lxsmm -ldl -lscalapack
 
 # Using LDFLAGS_LD since cp2k passes the LDFLAGS directly to the linker
+LD          = $(FC)
 LDFLAGS     = $(LDFLAGS_LD) -lgfortran -lc -lgomp
