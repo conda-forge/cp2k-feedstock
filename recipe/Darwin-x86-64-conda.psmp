@@ -25,4 +25,4 @@ LIBS        = -framework Accelerate -lfftw3 -lfftw3_omp -lxsmmf -lxsmm -ldl -lsc
 
 # need to use mpifort also for linking
 LD          = $(FC)
-LDFLAGS     = $(LDFLAGS) -lgfortran -lc -lgomp
+LDFLAGS    += -lgfortran -lc -lgomp
