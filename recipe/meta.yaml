@@ -25,7 +25,7 @@ source:
 
 build:
   number: {{ build }}
-  skip: True  # [not (linux or osx) ]
+  skip: True  # [not (linux or osx) or osx and mpi != 'nompi']
   string: {{ build_string }}
 
 requirements:
