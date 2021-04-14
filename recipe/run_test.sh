@@ -1,21 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "Runing with mpi=$mpi and blas=$blas_impl"
-
-# select ARCH file and version
-if [[ ! -z "$MACOSX_DEPLOYMENT_TARGET" ]]; then
-  ARCH=Darwin-x86-64-conda
-else
-  ARCH=Linux-x86-64-conda
-fi
-
-if [[ "$mpi" == "nompi" ]]; then
- VERSION=ssmp
-else
- VERSION=psmp
-fi
-
+source ./define_vars.sh
 
 # run regression tests
 if [[ "$mpi" == "nompi" ]]; then
