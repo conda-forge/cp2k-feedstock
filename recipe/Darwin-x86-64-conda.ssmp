@@ -15,8 +15,10 @@
 ## Notes
 # * no libxc / libint support (could be added)
 
+FC          = x86_64-apple-darwin13.4.0-gfortran
 CPP         = $(CC)-cpp
 CPPFLAGS   += -C -P -traditional -D__NO_IPI_DRIVER -nostdinc
+CFLAGS     += -fopenmp
 AR         += -r
 DFLAGS      = -D__NO_STATM_ACCESS -D__ACCELERATE -D__FFTW3 -D__LIBXSMM
 FCFLAGS     = $(FFLAGS) -I $(PREFIX)/include -fbacktrace -ffree-form -fimplicit-none -std=f2008 -fopenmp $(DFLAGS)

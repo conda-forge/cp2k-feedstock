@@ -18,6 +18,7 @@
 
 FC          = mpifort
 AR          = $(GCC_AR) -r
+CFLAGS     += -fopenmp
 CPPFLAGS   += -C -P -traditional -D__NO_IPI_DRIVER -nostdinc
 DFLAGS      = -D__FFTW3 -D__LIBXSMM -D__parallel -D__SCALAPACK
 FCFLAGS     = $(FFLAGS) -I $(PREFIX)/include -fbacktrace -ffree-form -fimplicit-none -std=f2008 -fopenmp $(DFLAGS)
