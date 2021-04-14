@@ -4,7 +4,7 @@
 # Define build matrix for MPI vs. non-mpi
 # ensure mpi is defined (needed for conda-smithy recipe-lint)
 {% set mpi = mpi or 'nompi' %}
-{% set build = 0 %}
+{% set build = 1 %}
 {% if mpi == 'nompi' %}
 # prioritize 'nompi' variant via build number
 {% set build = build + 1000 %}
@@ -57,9 +57,10 @@ requirements:
 
 test:
   commands:
-    # note: regtests are running at "build" stage
-    # this is just a dummy
+    # note: regtests are running at "build" stage; this is just a smoke test
     - cp2k.ssmp --help  # [mpi == 'nompi']
+    -  mpiexec --bind-to none -mca plm isolated cp2k.psmp --help  # [mpi != 'nompi']
+
 
 about:
   home: https://www.cp2k.org
