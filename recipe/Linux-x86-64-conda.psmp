@@ -1,6 +1,4 @@
-# Minimal arch file for CP2K, with minimal dependencies.
-# With this setup, all of CP2K can be pasted together in a single .f90 file:
-# https://www.dropbox.com/s/18oi02srbot3h9p/cp2k_single_file.f90.gz
+# CP2K ARCH file for linux build on conda-forge (MS Azure runners)
 #
 ### Environment variables set in build environment (2020-12-06):
 #
