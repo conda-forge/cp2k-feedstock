@@ -51,6 +51,7 @@ requirements:
   run:
     - {{ mpi }}  # [mpi != 'nompi']
     - scalapack  # [mpi != 'nompi']
+
 test:
   commands:
     # note: regtests are running at "build" stage
