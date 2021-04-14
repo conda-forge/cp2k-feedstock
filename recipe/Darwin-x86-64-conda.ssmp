@@ -17,7 +17,7 @@ FC          = x86_64-apple-darwin13.4.0-gfortran
 CPP         = $(CC)-cpp
 CPPFLAGS   += -C -P -traditional -D__NO_IPI_DRIVER -nostdinc
 # default -std=c99 complains about missing declaration of clock_gettime
-CFLAGS     += -fopenmp -g -std=gnu99
+CFLAGS     += -fopenmp -g -std=c11
 AR         += -r
 DFLAGS      = -D__NO_STATM_ACCESS -D__ACCELERATE -D__FFTW3 -D__LIBXSMM
 FCFLAGS     = $(FFLAGS) -I $(PREFIX)/include -fbacktrace -ffree-form -fimplicit-none -std=f2008 -fopenmp -g $(DFLAGS)
