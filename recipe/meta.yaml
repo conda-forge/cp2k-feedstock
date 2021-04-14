@@ -24,7 +24,10 @@ source:
 
 build:
   number: {{ build }}
-  skip: true  # [not (linux or osx) or osx and mpi != 'nompi']
+  # osx build skipped until futher notice:
+  # - nompi: osx issue introduced in 8.1, fixed in future 8.2
+  # - openmpi: runtime failures during test suite
+  skip: true  # [not linux]
   string: {{ build_string }}
 
 requirements:
@@ -49,6 +52,7 @@ requirements:
     - fftw
   run:
     - {{ mpi }}  # [mpi != 'nompi']
+    - scalapack  # [mpi != 'nompi']
     - __osx >={{ MACOSX_DEPLOYMENT_TARGET|default("10.9") }}  # [osx and x86_64]
 
 test:
