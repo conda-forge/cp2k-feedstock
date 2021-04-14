@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-source ./define_vars.sh
+source ${RECIPE_DIR}/define_vars.sh
 
 # create directory structure for regtest
 cp ${RECIPE_DIR}/${ARCH}.${VERSION} arch/${ARCH}.${VERSION}
