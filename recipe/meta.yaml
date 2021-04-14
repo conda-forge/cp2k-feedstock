@@ -1,6 +1,17 @@
 {% set name = "cp2k" %}
 {% set version = "7.1.0" %}
 
+# Define build matrix for MPI vs. non-mpi
+# ensure mpi is defined (needed for conda-smithy recipe-lint)
+{% set mpi = mpi or 'nompi' %}
+{% set build = 6 %}
+{% if mpi == 'nompi' %}
+# prioritize nompi variant via build number
+{% set build = build + 1000 %}
+{% endif %}
+
+{% set build_string = "py{}_{}_{}".format(environ.get('CONDA_PY', ''), mpi, build) %}
+
 package:
   name: {{ name|lower }}
   version: {{ version }}
@@ -13,16 +24,15 @@ source:
     - macosxtest.patch  # [osx]
 
 build:
-  number: 5
-  skip: True  # [not (linux or osx) ]
+  number: {{ build }}
+  skip: True  # [not (linux or osx) or osx and mpi != 'nompi']
+  string: {{ build_string }}
 
 requirements:
   build:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - {{ compiler('fortran') }}
-    - llvm-openmp  # [osx]
-    - libgomp  # [linux]
     - make
     - autoconf
     - automake
@@ -30,14 +40,22 @@ requirements:
     - libtool
     - python 
   host:
+    - {{ mpi }}  # [mpi != 'nompi']
+    - scalapack  # [mpi != 'nompi']
     - libblas
     - liblapack
+    - llvm-openmp  # [osx]
+    - libgomp  # [linux]
     - libxsmm
     - fftw
+  run:
+    - {{ mpi }}  # [mpi != 'nompi']
 
 test:
   commands:
-    - cp2k.ssmp --help
+    # note: regtests are running at "build" stage
+    # this is just a dummy
+    - cp2k.ssmp --help  # [mpi == 'nompi']
 
 about:
   home: https://www.cp2k.org

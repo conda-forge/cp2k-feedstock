@@ -24,6 +24,8 @@ libblas:
 - 3.8 *netlib
 liblapack:
 - 3.8 *netlib
+mpi:
+- openmpi
 pin_run_as_build:
   fftw:
     max_pin: x

@@ -24,6 +24,8 @@ liblapack:
 - 3.8 *netlib
 macos_machine:
 - x86_64-apple-darwin13.4.0
+mpi:
+- nompi
 pin_run_as_build:
   fftw:
     max_pin: x
