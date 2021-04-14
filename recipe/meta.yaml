@@ -6,7 +6,7 @@
 {% set mpi = mpi or 'nompi' %}
 {% set build = 0 %}
 {% if mpi == 'nompi' %}
-# prioritize nompi variant via build number
+# prioritize 'nompi' variant via build number
 {% set build = build + 1000 %}
 {% endif %}
 
