@@ -3,6 +3,7 @@
 #
 ## A selection of environment variables set by conda (as of 2020-12-03):
 # CC=x86_64-apple-darwin13.4.0-clang
+# CFLAGS=-march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fPIE -fstack-protector-strong -O2 -pipe -isystem $PREFIX/include -fdebug-prefix-map=$SRC_DIR=/usr/local/src/conda/cp2k-8.1.0 -fdebug-prefix-map=$PREFIX=/usr/local/src/conda-prefix
 # CXX=x86_64-apple-darwin13.4.0-clang++
 # CPPFLAGS=-D_FORTIFY_SOURCE=2 -isystem $PREFIX/include -mmacosx-version-min=10.9
 # AR=$BUILD_PREFIX/bin/x86_64-apple-darwin13.4.0-ar
@@ -11,17 +12,16 @@
 # FFLAGS=-march=core2 -mtune=haswell -ftree-vectorize -fPIC -fstack-protector -O2 -pipe -isystem $PREFIX/include -fdebug-prefix-map=$SRC_DIR=/usr/local/src/conda/cp2k-7.1.0 -fdebug-prefix-map=$PREFIX=/usr/local/src/conda-prefix
 # LDFLAGS=-Wl,-pie -Wl,-headerpad_max_install_names -Wl,-dead_strip_dylibs -Wl,-rpath,$PREFIX/lib -L$PREFIX/lib
 # LDFLAGS_LD=-pie -headerpad_max_install_names -dead_strip_dylibs -rpath $PREFIX/lib -L$PREFIX/lib
-#
-## Notes
-# * no libxc / libint support (could be added)
 
 FC          = mpifort
 CPP         = $(CC)-cpp
 CPPFLAGS   += -C -P -traditional -D__NO_IPI_DRIVER -nostdinc
+# default -std=c99 complains about missing declaration of clock_gettime
+CFLAGS     += -fopenmp -g -std=c11
 AR         += -r
 DFLAGS      = -D__NO_STATM_ACCESS -D__ACCELERATE -D__FFTW3 -D__LIBXSMM -D__parallel -D__SCALAPACK
-FCFLAGS     = $(FFLAGS) -I $(PREFIX)/include -fbacktrace -ffree-form -fimplicit-none -std=f2008 -fopenmp $(DFLAGS)
-LIBS        = = -llapack -lblas -lfftw3 -lfftw3_omp -lxsmmf -lxsmm -ldl -lscalapack
+FCFLAGS     = $(FFLAGS) -I $(PREFIX)/include -fbacktrace -ffree-form -fimplicit-none -std=f2008 -fopenmp -g $(DFLAGS)
+LIBS        = = -llapack -lblas -lfftw3 -lfftw3_omp -lxsmmf -lxsmm -ldl -lscalapack -lrt
 
 # need to use mpifort also for linking
 LD          = $(FC)

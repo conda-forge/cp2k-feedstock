@@ -49,13 +49,6 @@ Current build status
                   <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/cp2k-feedstock?branchName=master&jobName=linux&configuration=linux_64_mpiopenmpi" alt="variant">
                 </a>
               </td>
-            </tr><tr>
-              <td>osx_64_mpinompi</td>
-              <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=7705&branchName=master">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/cp2k-feedstock?branchName=master&jobName=osx&configuration=osx_64_mpinompi" alt="variant">
-                </a>
-              </td>
             </tr>
           </tbody>
         </table>

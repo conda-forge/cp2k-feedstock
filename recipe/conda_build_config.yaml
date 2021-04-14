@@ -4,3 +4,8 @@ mpi:
 
 pin_run_as_build:
   openmpi: x.x
+
+MACOSX_DEPLOYMENT_TARGET:  # [osx and x86_64]
+  - "10.12"                # [osx and x86_64]
+MACOSX_SDK_VERSION:        # [osx and x86_64]
+  - "10.12"                # [osx and x86_64]

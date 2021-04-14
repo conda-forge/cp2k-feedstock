@@ -1,6 +1,4 @@
-# Minimal arch file for CP2K, with minimal dependencies.
-# With this setup, all of CP2K can be pasted together in a single .f90 file:
-# https://www.dropbox.com/s/18oi02srbot3h9p/cp2k_single_file.f90.gz
+# CP2K ARCH file for linux build on conda-forge (MS Azure runners)
 #
 ### Environment variables set in build environment (2020-12-06):
 #
@@ -18,10 +16,11 @@
 
 FC          = mpifort
 AR          = $(GCC_AR) -r
+CFLAGS     += -fopenmp -g
 CPPFLAGS   += -C -P -traditional -D__NO_IPI_DRIVER -nostdinc
 DFLAGS      = -D__FFTW3 -D__LIBXSMM -D__parallel -D__SCALAPACK
-FCFLAGS     = $(FFLAGS) -I $(PREFIX)/include -fbacktrace -ffree-form -fimplicit-none -std=f2008 -fopenmp $(DFLAGS)
-LIBS        = -llapack -lblas -lfftw3 -lfftw3_omp -lxsmmf -lxsmm -ldl -lscalapack
+FCFLAGS     = $(FFLAGS) -I $(PREFIX)/include -fbacktrace -ffree-form -fimplicit-none -std=f2008 -fopenmp -g $(DFLAGS)
+LIBS        = -llapack -lblas -lfftw3 -lfftw3_omp -lxsmmf -lxsmm -ldl -lscalapack -lrt
 # Since LDFLAGS_LD is missing, we are linking using gfortran (which can use LDFLAGS)
 LD          = $(FC)
 LDFLAGS    += -fopenmp -Wl,-lgomp
