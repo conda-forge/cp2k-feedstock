@@ -29,7 +29,8 @@ index 5b11475..2ddbc0e 100644
 
  // needed for struct timespec
 -#define _XOPEN_SOURCE 700 /* Enable POSIX 2008/13 */
-+#define _DARWIN_C_SOURCE 1
++#define _POSIX_C_SOURCE 200809L /* Enable POSIX 2008/13 */
+
 
  #include <assert.h>
  #include <fenv.h>
@@ -42,7 +43,8 @@ index e439953..b384bd2 100644
  #ifndef __NO_IPI_DRIVER
 
 -#define _XOPEN_SOURCE 700 /* Enable POSIX 2008/13 */
-+#define _DARWIN_C_SOURCE 1
++#define _POSIX_C_SOURCE 200809L /* Enable POSIX 2008/13 */
+
 
  #include <math.h>
  #include <netdb.h>
