@@ -50,6 +50,7 @@ requirements:
     - libgomp  # [linux]
     - libxsmm
     - fftw
+    - spglib
   run:
     - {{ mpi }}  # [mpi != 'nompi']
     - scalapack  # [mpi != 'nompi']
