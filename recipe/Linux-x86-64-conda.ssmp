@@ -16,6 +16,7 @@
 
 AR          = $(GCC_AR) -r
 FC          = x86_64-conda-linux-gnu-gfortran
+CFLAGS     += -fopenmp
 CPPFLAGS   += -C -P -traditional -D__NO_IPI_DRIVER -nostdinc
 DFLAGS      = -D__FFTW3 -D__LIBXSMM -D__SPGLIB
 FCFLAGS     = $(FFLAGS) -I $(PREFIX)/include -fbacktrace -ffree-form -fimplicit-none -std=f2008 -fopenmp $(DFLAGS)
