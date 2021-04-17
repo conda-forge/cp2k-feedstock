@@ -35,3 +35,6 @@ cd ${SRC_DIR}
 mkdir -p ${PREFIX}/bin
 cp exe/${ARCH}/cp2k.${VERSION} ${PREFIX}/bin/cp2k.${VERSION}
 cp exe/${ARCH}/cp2k_shell.${VERSION} ${PREFIX}/bin/cp2k_shell.${VERSION}
+
+exe_size=`du -sh exe/${ARCH}/cp2k.${VERSION}`
+echo "Executable size: $exe_size"
