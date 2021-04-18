@@ -21,7 +21,7 @@ CFLAGS     += -fopenmp -std=c11
 AR         += -r
 DFLAGS      = -D__NO_STATM_ACCESS -D__ACCELERATE -D__FFTW3 -D__LIBXSMM -D__parallel -D__SCALAPACK -D__SPGLIB
 FCFLAGS     = $(FFLAGS) -I $(PREFIX)/include -fbacktrace -ffree-form -fimplicit-none -std=f2008 -fopenmp $(DFLAGS)
-LIBS        = = -llapack -lblas -lfftw3 -lfftw3_omp -lxsmmf -lxsmm -ldl -lscalapack -lrt -lsymspg
+LIBS        = -framework Accelerate -lfftw3 -lfftw3_omp -lxsmmf -lxsmm -ldl -lscalapack -lrt -lsymspg
 
 # need to use mpifort also for linking
 LD          = $(FC)

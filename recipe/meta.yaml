@@ -4,7 +4,7 @@
 # Define build matrix for MPI vs. non-mpi
 # ensure mpi is defined (needed for conda-smithy recipe-lint)
 {% set mpi = mpi or 'nompi' %}
-{% set build = 3 %}
+{% set build = 4 %}
 {% if mpi == 'nompi' %}
 # prioritize 'nompi' variant via build number
 {% set build = build + 1000 %}
@@ -44,7 +44,8 @@ requirements:
   host:
     - {{ mpi }}  # [mpi != 'nompi']
     - scalapack  # [mpi != 'nompi']
-    - libblas
+    - libblas  # [osx]
+    - openblas * *openmp*  # [linux]
     - liblapack
     - llvm-openmp  # [osx]
     - libgomp  # [linux]
@@ -55,6 +56,8 @@ requirements:
     - {{ mpi }}  # [mpi != 'nompi']
     - scalapack  # [mpi != 'nompi']
     - __osx >={{ MACOSX_DEPLOYMENT_TARGET|default("10.9") }}  # [osx and x86_64]
+    - libblas * *openblas  # [linux]
+    - openblas * *openmp*  # [linux]
 
 test:
   commands:
