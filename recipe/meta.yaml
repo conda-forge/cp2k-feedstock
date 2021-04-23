@@ -4,7 +4,7 @@
 # Define build matrix for MPI vs. non-mpi
 # ensure mpi is defined (needed for conda-smithy recipe-lint)
 {% set mpi = mpi or 'nompi' %}
-{% set build = 4 %}
+{% set build = 5 %}
 {% if mpi == 'nompi' %}
 # prioritize 'nompi' variant via build number
 {% set build = build + 1000 %}
@@ -52,6 +52,7 @@ requirements:
     - libxsmm
     - fftw
     - spglib
+    - libxc ==4.3.*
   run:
     - {{ mpi }}  # [mpi != 'nompi']
     - scalapack  # [mpi != 'nompi']
