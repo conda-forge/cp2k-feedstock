@@ -19,7 +19,7 @@ CPPFLAGS   += -C -P -traditional -D__NO_IPI_DRIVER -nostdinc
 # default -std=c99 complains about missing declaration of clock_gettime
 CFLAGS     += -fopenmp -std=c11
 AR         += -r
-DFLAGS      = -D__NO_STATM_ACCESS -D__ACCELERATE -D__FFTW3 -D__LIBXSMM -D__SPGLIB -D__LIBXC
+DFLAGS      = -D__NO_STATM_ACCESS -D__ACCELERATE -D__FFTW3 -D__LIBXSMM -D__SPGLIB -D__LIBXC -D__SIRIUS
 FCFLAGS     = $(FFLAGS) -I $(PREFIX)/include -fbacktrace -ffree-form -fimplicit-none -std=f2008 -fopenmp $(DFLAGS)
 LIBS        = -framework Accelerate -lfftw3 -lfftw3_omp -lxsmmf -lxsmm -ldl -lrt -lsymspg -lxcf03 -lxc
 # Using LDFLAGS_LD since cp2k passes the LDFLAGS directly to the linker

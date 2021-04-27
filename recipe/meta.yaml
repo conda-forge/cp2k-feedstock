@@ -53,6 +53,7 @@ requirements:
     - fftw
     - spglib
     - libxc >=5.1
+    - sirius
   run:
     - {{ mpi }}  # [mpi != 'nompi']
     - scalapack  # [mpi != 'nompi']
