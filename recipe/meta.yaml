@@ -1,10 +1,10 @@
 {% set name = "cp2k" %}
-{% set version = "8.1.0" %}
+{% set version = "8.2.0" %}
 
 # Define build matrix for MPI vs. non-mpi
 # ensure mpi is defined (needed for conda-smithy recipe-lint)
 {% set mpi = mpi or 'nompi' %}
-{% set build = 5 %}
+{% set build = 0 %}
 {% if mpi == 'nompi' %}
 # prioritize 'nompi' variant via build number
 {% set build = build + 1000 %}
@@ -18,8 +18,8 @@ package:
 
 source:
   url: https://github.com/{{ name }}/{{ name }}/releases/download/v{{ version }}/{{ name }}-{{ version[:-2] }}.tar.bz2
-  sha256: 7f37aead120730234a60b2989d0547ae5e5498d93b1e9b5eb548c041ee8e7772
-  patches: 
+  sha256: 2e24768720efed1a5a4a58e83e2aca502cd8b95544c21695eb0de71ed652f20a
+  patches:
     - macosxtest.patch  # [osx]
 
 build:
@@ -64,7 +64,7 @@ test:
   commands:
     # note: regtests are running at "build" stage; this is just a smoke test
     - cp2k.ssmp --help  # [mpi == 'nompi']
-    -  mpiexec --bind-to none -mca plm isolated cp2k.psmp --help  # [mpi != 'nompi']
+    - mpiexec --bind-to none -mca plm isolated cp2k.psmp --help   # [mpi != 'nompi']
 
 
 about:
