@@ -24,10 +24,7 @@ source:
 
 build:
   number: {{ build }}
-  # osx build skipped until futher notice:
-  # - nompi: osx issue introduced in 8.1, fixed in future 8.2
-  # - openmpi: runtime failures during test suite
-  skip: true  # [not linux]
+  skip: true  # [win]
   string: {{ build_string }}
 
 requirements:
