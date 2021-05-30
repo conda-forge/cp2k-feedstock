@@ -63,7 +63,7 @@ requirements:
 
 test:
   commands:
-    # note: regtests are running at "build" stage; this is just a smoke test
+    # note: regtests are running at the "build" stage; this is just a smoke test
     - cp2k.ssmp --help  # [mpi == 'nompi']
     - mpiexec --bind-to none -mca plm isolated cp2k.psmp --help   # [mpi != 'nompi']
 
