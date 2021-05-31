@@ -1,0 +1,286 @@
+diff --git a/exts/dbcsr b/exts/dbcsr
+index 46cd09284..c9b6528f7 160000
+--- a/exts/dbcsr
++++ b/exts/dbcsr
+@@ -1 +1 @@
+-Subproject commit 46cd0928465ee6bf21d82e5aac0a1970dcb54501
++Subproject commit c9b6528f7828732871ef2d500c379eaaddcd519d
+diff --git a/src/grid/cpu/grid_collocate_dgemm.c b/src/grid/cpu/grid_collocate_dgemm.c
+index 5b7abfd97..dd6fa746d 100644
+--- a/src/grid/cpu/grid_collocate_dgemm.c
++++ b/src/grid/cpu/grid_collocate_dgemm.c
+@@ -295,8 +295,8 @@ void apply_sphere_cutoff_ortho(struct collocation_integration_ *const handler,
+             int upper_corner[3] = {k + 1, j + 1, x1 + 1};
+ 
+             compute_interval(map[2], handler->grid.full_size[2],
+-                             handler->grid.size[2], handler->cube.size[2], x1,
+-                             &x, lower_corner + 2, upper_corner + 2, xwindow);
++                             handler->grid.size[2], xmax - lb_cube[2], x1, &x,
++                             lower_corner + 2, upper_corner + 2, xwindow);
+ 
+             if (upper_corner[2] - lower_corner[2]) {
+               const int position1[3] = {kg, jg - lb_cube[1], x};
+@@ -414,7 +414,7 @@ void apply_spherical_cutoff_generic(
+           continue;
+ 
+         compute_interval(map[2], handler->grid.full_size[2],
+-                         handler->grid.size[2], handler->cube.size[2], x1, &x,
++                         handler->grid.size[2], xmax - lb_cube[2], x1, &x,
+                          lower_corner + 2, upper_corner + 2, xwindow);
+ 
+         if (upper_corner[2] - lower_corner[2]) {
+diff --git a/src/sirius_interface.F b/src/sirius_interface.F
+index 656dc8b18..4ac219cab 100644
+--- a/src/sirius_interface.F
++++ b/src/sirius_interface.F
+@@ -61,15 +61,15 @@ MODULE sirius_interface
+    USE sirius,                          ONLY: &
+         sirius_add_atom, sirius_add_atom_type, sirius_add_atom_type_radial_function, &
+         sirius_create_context, sirius_create_ground_state, sirius_create_kset_from_grid, &
+-        sirius_dump_runtime_setup, sirius_finalize, sirius_find_ground_state, &
+-        sirius_get_band_energies, sirius_get_band_occupancies, sirius_get_energy, &
+-        sirius_get_forces, sirius_get_kpoint_properties, sirius_get_num_bands, &
+-        sirius_get_num_kpoints, sirius_get_num_spin_components, sirius_get_stress_tensor, &
+-        sirius_import_parameters, sirius_initialize, sirius_initialize_context, &
+-        sirius_option_add_string_to, sirius_option_get_length, sirius_option_get_name_and_type, &
+-        sirius_option_set_double, sirius_option_set_int, sirius_option_set_logical, &
+-        sirius_option_set_string, sirius_set_atom_position, sirius_set_atom_type_dion, &
+-        sirius_set_atom_type_radial_grid, sirius_set_lattice_vectors, sirius_update_ground_state
++        sirius_finalize, sirius_find_ground_state, sirius_get_band_energies, &
++        sirius_get_band_occupancies, sirius_get_energy, sirius_get_forces, &
++        sirius_get_kpoint_properties, sirius_get_num_kpoints, sirius_get_parameters, &
++        sirius_get_stress_tensor, sirius_import_parameters, sirius_initialize, &
++        sirius_initialize_context, sirius_option_add_string_to, sirius_option_get_length, &
++        sirius_option_get_name_and_type, sirius_option_set_double, sirius_option_set_int, &
++        sirius_option_set_logical, sirius_option_set_string, sirius_set_atom_position, &
++        sirius_set_atom_type_dion, sirius_set_atom_type_radial_grid, sirius_set_lattice_vectors, &
++        sirius_update_ground_state
+    USE xc_libxc,                        ONLY: libxc_check_existence_in_libxc
+ #include "./base/base_uses.f90"
+ 
+@@ -231,7 +231,7 @@ CONTAINS
+          CALL cp_sirius_fill_in_section(sctx, pwdft_sub_section, "iterative_solver")
+       ENDIF
+ 
+-      CALL sirius_dump_runtime_setup(sctx, "runtime.json")
++      !CALL sirius_dump_runtime_setup(sctx, "runtime.json")
+       CALL sirius_import_parameters(sctx)
+ 
+ ! lattice vectors of the unit cell should be in [a.u.] (length is in [a.u.])
+@@ -690,9 +690,9 @@ CONTAINS
+ 
+          CALL sirius_get_num_kpoints(ks_handler, cint)
+          nkpts = cint
+-         CALL sirius_get_num_bands(sctx, cint)
++         CALL sirius_get_parameters(sctx, num_bands=cint)
+          nbands = cint
+-         CALL sirius_get_num_spin_components(sctx, cint)
++         CALL sirius_get_parameters(sctx, num_spins=cint)
+          nspins = cint
+          e_fermi(:) = 0.0_dp
+          ALLOCATE (energies(nbands, nspins, nkpts))
+diff --git a/tests/SIRIUS/regtest-1/Au.inp b/tests/SIRIUS/regtest-1/Au.inp
+index e1e91c4ce..0311723fd 100644
+--- a/tests/SIRIUS/regtest-1/Au.inp
++++ b/tests/SIRIUS/regtest-1/Au.inp
+@@ -29,7 +29,7 @@
+        CONVERGE_BY_ENERGY 1
+     &END ITERATIVE_SOLVER
+     &MIXER
+-       TYPE broyden1
++       TYPE broyden2
+        MAX_HISTORY 8
+        BETA 0.6
+   &END MIXER
+diff --git a/tests/SIRIUS/regtest-1/Au_GTH.inp b/tests/SIRIUS/regtest-1/Au_GTH.inp
+index 8f9e1d8dd..f607cfc83 100644
+--- a/tests/SIRIUS/regtest-1/Au_GTH.inp
++++ b/tests/SIRIUS/regtest-1/Au_GTH.inp
+@@ -29,7 +29,7 @@
+        CONVERGE_BY_ENERGY 1
+      &END ITERATIVE_SOLVER
+      &MIXER
+-       TYPE broyden1
++       TYPE broyden2
+        MAX_HISTORY 8
+      &END MIXER
+   &END PW_DFT
+diff --git a/tests/SIRIUS/regtest-1/Fe.inp b/tests/SIRIUS/regtest-1/Fe.inp
+index 530dd8ded..420b84d19 100644
+--- a/tests/SIRIUS/regtest-1/Fe.inp
++++ b/tests/SIRIUS/regtest-1/Fe.inp
+@@ -30,7 +30,7 @@
+     &END ITERATIVE_SOLVER
+     &MIXER
+       BETA 0.7
+-      TYPE broyden1
++      TYPE broyden2
+       MAX_HISTORY 8
+     &END MIXER
+   &END PW_DFT
+diff --git a/tests/SIRIUS/regtest-1/Fe_dos.inp b/tests/SIRIUS/regtest-1/Fe_dos.inp
+index f912cdcaa..3bb243f80 100644
+--- a/tests/SIRIUS/regtest-1/Fe_dos.inp
++++ b/tests/SIRIUS/regtest-1/Fe_dos.inp
+@@ -30,7 +30,7 @@
+     &END ITERATIVE_SOLVER
+     &MIXER
+       BETA 0.7
+-      TYPE broyden1
++      TYPE broyden2
+       MAX_HISTORY 8
+     &END MIXER
+     &PRINT
+diff --git a/tests/SIRIUS/regtest-1/He-full-potential.inp b/tests/SIRIUS/regtest-1/He-full-potential.inp
+index 7840555a1..b825758c2 100644
+--- a/tests/SIRIUS/regtest-1/He-full-potential.inp
++++ b/tests/SIRIUS/regtest-1/He-full-potential.inp
+@@ -35,7 +35,7 @@
+     &END ITERATIVE_SOLVER
+     &MIXER
+        BETA 0.95
+-       TYPE broyden1
++       TYPE broyden2
+        MAX_HISTORY 8
+     &END MIXER
+   &END PW_DFT
+diff --git a/tests/SIRIUS/regtest-1/LiF.inp b/tests/SIRIUS/regtest-1/LiF.inp
+index aeeef8bb7..5d7cec1dc 100644
+--- a/tests/SIRIUS/regtest-1/LiF.inp
++++ b/tests/SIRIUS/regtest-1/LiF.inp
+@@ -29,7 +29,7 @@
+     &END ITERATIVE_SOLVER
+     &MIXER
+        BETA 0.75
+-       TYPE broyden1
++       TYPE broyden2
+        MAX_HISTORY 8
+     &END MIXER
+   &END PW_DFT
+diff --git a/tests/SIRIUS/regtest-1/NiO.inp b/tests/SIRIUS/regtest-1/NiO.inp
+index 5428fdefc..683203635 100644
+--- a/tests/SIRIUS/regtest-1/NiO.inp
++++ b/tests/SIRIUS/regtest-1/NiO.inp
+@@ -29,7 +29,7 @@
+     &END ITERATIVE_SOLVER
+     &MIXER
+        BETA 0.75
+-       TYPE broyden1
++       TYPE broyden2
+        MAX_HISTORY 8
+     &END MIXER
+   &END PW_DFT
+diff --git a/tests/SIRIUS/regtest-1/SrVO.inp b/tests/SIRIUS/regtest-1/SrVO.inp
+index fe3597545..c73ce1bd6 100644
+--- a/tests/SIRIUS/regtest-1/SrVO.inp
++++ b/tests/SIRIUS/regtest-1/SrVO.inp
+@@ -29,7 +29,7 @@
+     &END ITERATIVE_SOLVER
+     &MIXER
+        BETA 0.95
+-       TYPE broyden1
++       TYPE broyden2
+        MAX_HISTORY 8
+     &END MIXER
+   &END PW_DFT
+diff --git a/tools/toolchain/install_cp2k_toolchain.sh b/tools/toolchain/install_cp2k_toolchain.sh
+index e3de92022..44a7bdd71 100755
+--- a/tools/toolchain/install_cp2k_toolchain.sh
++++ b/tools/toolchain/install_cp2k_toolchain.sh
+@@ -304,9 +304,9 @@ with_spla="__DONTUSE__"
+ with_cosma="__INSTALL__"
+ with_libvori="__INSTALL__"
+ # for MPI, we try to detect system MPI variant
+-with_openmpi=__SYSTEM__
+-with_mpich=__SYSTEM__
+-with_intelmpi=__SYSTEM__
++with_openmpi="__SYSTEM__"
++with_mpich="__SYSTEM__"
++with_intelmpi="__SYSTEM__"
+ if (command -v mpirun >&- 2>&-); then
+   # check if we are dealing with openmpi, mpich or intelmpi
+   if (mpirun --version 2>&1 | grep -s -q "HYDRA"); then
+@@ -716,8 +716,8 @@ if [ "$with_sirius" = "__INSTALL__" ]; then
+   [ "$with_fftw" = "__DONTUSE__" ] && with_fftw="__INSTALL__"
+   [ "$with_spglib" = "__DONTUSE__" ] && with_spglib="__INSTALL__"
+   [ "$with_hdf5" = "__DONTUSE__" ] && with_hdf5="__INSTALL__"
+-  [ "$with_libvdwxc" = "__DONTUSE__" ] && with_libvdwxc="__INSTALL__"
+-  [ "$with_cosma" = "__DONTUSE__" ] && with_cosma="__INSTALL__"
++#  [ "$with_libvdwxc" = "__DONTUSE__" ] && with_libvdwxc="__INSTALL__"
++#  [ "$with_cosma" = "__DONTUSE__" ] && with_cosma="__INSTALL__"
+ fi
+ 
+ if [ "$with_plumed" = "__INSTALL__" ]; then
+diff --git a/tools/toolchain/scripts/stage8/install_sirius.sh b/tools/toolchain/scripts/stage8/install_sirius.sh
+index 35bfe461b..c6b411e26 100755
+--- a/tools/toolchain/scripts/stage8/install_sirius.sh
++++ b/tools/toolchain/scripts/stage8/install_sirius.sh
+@@ -9,8 +9,8 @@
+ [ "${BASH_SOURCE[0]}" ] && SCRIPT_NAME="${BASH_SOURCE[0]}" || SCRIPT_NAME=$0
+ SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_NAME")/.." && pwd -P)"
+ 
+-sirius_ver="7.0.2"
+-sirius_sha256="ee613607ce3be0b2c3f69b560b2415ce1b0e015179002aa90739430dbfaa0389"
++sirius_ver="7.2.1"
++sirius_sha256="01bf6c9893ff471473e13351ca7fdc2ed6c1f4b1bb7afa151909ea7cd6fa0de7"
+ 
+ source "${SCRIPT_DIR}"/common_vars.sh
+ source "${SCRIPT_DIR}"/tool_kit.sh
+@@ -136,7 +136,7 @@ case "$with_sirius" in
+       fi
+ 
+       CMAKE_PREFIX_PATH="${CMAKE_PREFIX_PATH}:${SPFFT_ROOT}/lib/cmake:${SPFFT_ROOT}/lib64/cmake" \
+-        cmake -DCMAKE_INSTALL_PREFIX=${pkg_install_dir} \
++        cmake -DCMAKE_INSTALL_PREFIX="${pkg_install_dir}" \
+         -DCMAKE_CXXFLAGS_RELEASE="${SIRIUS_OPT}" \
+         -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="${SIRIUS_DBG}" \
+         -DCMAKE_CXX_COMPILER="${MPICXX}" \
+@@ -146,12 +146,13 @@ case "$with_sirius" in
+         ${COMPILATION_OPTIONS} .. > compile.log 2>&1
+ 
+       make -j $(get_nprocs) -C src >> compile.log 2>&1
++      cat compile.log
+ 
+-      install -d ${pkg_install_dir}/include >> install.log 2>&1
+-      install -d ${pkg_install_dir}/lib >> install.log 2>&1
+-      cp -R ../src/* ${pkg_install_dir}/include >> install.log 2>&1
+-      install -m 644 src/*.a ${pkg_install_dir}/lib >> install.log 2>&1
+-      install -m 644 src/mod_files/*.mod ${pkg_install_dir}/include >> install.log 2>&1
++      install -d "${pkg_install_dir}/include" >> install.log 2>&1
++      install -d "${pkg_install_dir}/lib" >> install.log 2>&1
++      cp -R ../src/* "${pkg_install_dir}/include" >> install.log 2>&1
++      install -m 644 src/*.a "${pkg_install_dir}/lib" >> install.log 2>&1
++      install -m 644 src/mod_files/*.mod "${pkg_install_dir}/include" >> install.log 2>&1
+       cd ..
+ 
+       # now do we have cuda as well
+diff --git a/tools/toolchain/scripts/stage8/install_spfft.sh b/tools/toolchain/scripts/stage8/install_spfft.sh
+index e9ae00a2d..cbcbf67ee 100755
+--- a/tools/toolchain/scripts/stage8/install_spfft.sh
++++ b/tools/toolchain/scripts/stage8/install_spfft.sh
+@@ -9,8 +9,8 @@
+ [ "${BASH_SOURCE[0]}" ] && SCRIPT_NAME="${BASH_SOURCE[0]}" || SCRIPT_NAME=$0
+ SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_NAME")/.." && pwd -P)"
+ 
+-spfft_ver="0.9.13"
+-spfft_sha256="621543658991782dd184948082c7eea474b6759140f796bb55da2e2f654d3558"
++spfft_ver="1.0.3"
++spfft_sha256="b74ee66f766580d613bbcae91301cad545711e32c0a3e46860e0200b70915399"
+ source "${SCRIPT_DIR}"/common_vars.sh
+ source "${SCRIPT_DIR}"/tool_kit.sh
+ source "${SCRIPT_DIR}"/signal_trap.sh
+diff --git a/tools/toolchain/scripts/stage8/install_spla.sh b/tools/toolchain/scripts/stage8/install_spla.sh
+index c0de80d96..b5fde95be 100755
+--- a/tools/toolchain/scripts/stage8/install_spla.sh
++++ b/tools/toolchain/scripts/stage8/install_spla.sh
+@@ -9,8 +9,8 @@
+ [ "${BASH_SOURCE[0]}" ] && SCRIPT_NAME="${BASH_SOURCE[0]}" || SCRIPT_NAME=$0
+ SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_NAME")/.." && pwd -P)"
+ 
+-spla_ver="1.2.1"
+-spla_sha256="4d7237f752dc6257778c84ee19c9635072b1cb8ce8d9ab6e34a047f63a736b29"
++spla_ver="1.4.0"
++spla_sha256="364a9fe759fddec8a0839cf79f1cf0619fc36f4d4c15f1c2b1f437249d7840c6"
+ source "${SCRIPT_DIR}"/common_vars.sh
+ source "${SCRIPT_DIR}"/tool_kit.sh
+ source "${SCRIPT_DIR}"/signal_trap.sh
