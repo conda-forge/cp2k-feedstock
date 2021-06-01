@@ -22,7 +22,7 @@ source:
   patches:
     - macosxtest.patch  # [osx]
     # remove in release following cp2k 8.2
-    - sirius.patch  # [osx]
+    - sirius.patch
 
 build:
   number: {{ build }}
