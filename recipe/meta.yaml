@@ -4,7 +4,7 @@
 # Define build matrix for MPI vs. non-mpi
 # ensure mpi is defined (needed for conda-smithy recipe-lint)
 {% set mpi = mpi or 'nompi' %}
-{% set build = 0 %}
+{% set build = 1 %}
 {% if mpi == 'nompi' %}
 # prioritize 'nompi' variant via build number
 {% set build = build + 1000 %}
@@ -21,6 +21,8 @@ source:
   sha256: 2e24768720efed1a5a4a58e83e2aca502cd8b95544c21695eb0de71ed652f20a
   patches:
     - macosxtest.patch  # [osx]
+    # remove in release following cp2k 8.2
+    - sirius.patch
 
 build:
   number: {{ build }}
@@ -53,6 +55,7 @@ requirements:
     - fftw
     - spglib
     - libxc >=5.1
+    - sirius  # [mpi != 'nompi']
   run:
     - {{ mpi }}  # [mpi != 'nompi']
     - scalapack  # [mpi != 'nompi']
@@ -62,7 +65,7 @@ requirements:
 
 test:
   commands:
-    # note: regtests are running at "build" stage; this is just a smoke test
+    # note: regtests are running at the "build" stage; this is just a smoke test
     - cp2k.ssmp --help  # [mpi == 'nompi']
     - mpiexec --bind-to none -mca plm isolated cp2k.psmp --help   # [mpi != 'nompi']
 
