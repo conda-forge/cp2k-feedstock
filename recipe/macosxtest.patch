@@ -19,32 +19,3 @@ index 49354922b0..9ff380833c 100755
 +maxtasksdefault=`sysctl -n hw.logicalcpu`
  maxtasks=${maxtasks:-${maxtasksdefault}}
  maxbuildtasks=${maxbuildtasks:-${maxtasks}}
- 
-diff --git a/src/grid/grid_replay.c b/src/grid/grid_replay.c
-index 5b11475..2ddbc0e 100644
---- a/src/grid/grid_replay.c
-+++ b/src/grid/grid_replay.c
-@@ -6,7 +6,7 @@
- /*----------------------------------------------------------------------------*/
-
- // needed for struct timespec
--#define _XOPEN_SOURCE 700 /* Enable POSIX 2008/13 */
-+#define _POSIX_C_SOURCE 200809L /* Enable POSIX 2008/13 */
-
-
- #include <assert.h>
- #include <fenv.h>
-diff --git a/src/sockets.c b/src/sockets.c
-index e439953..b384bd2 100644
---- a/src/sockets.c
-+++ b/src/sockets.c
-@@ -38,7 +38,7 @@
-  ******************************************************************************/
- #ifndef __NO_IPI_DRIVER
-
--#define _XOPEN_SOURCE 700 /* Enable POSIX 2008/13 */
-+#define _POSIX_C_SOURCE 200809L /* Enable POSIX 2008/13 */
-
-
- #include <math.h>
- #include <netdb.h>
