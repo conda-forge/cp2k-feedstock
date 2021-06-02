@@ -26,18 +26,18 @@ index 656dc8b18..4ac219cab 100644
 +        sirius_update_ground_state
     USE xc_libxc,                        ONLY: libxc_check_existence_in_libxc
  #include "./base/base_uses.f90"
-
+ 
 @@ -231,7 +231,7 @@ CONTAINS
           CALL cp_sirius_fill_in_section(sctx, pwdft_sub_section, "iterative_solver")
        ENDIF
-
+ 
 -      CALL sirius_dump_runtime_setup(sctx, "runtime.json")
 +      !CALL sirius_dump_runtime_setup(sctx, "runtime.json")
        CALL sirius_import_parameters(sctx)
-
+ 
  ! lattice vectors of the unit cell should be in [a.u.] (length is in [a.u.])
 @@ -690,9 +690,9 @@ CONTAINS
-
+ 
           CALL sirius_get_num_kpoints(ks_handler, cint)
           nkpts = cint
 -         CALL sirius_get_num_bands(sctx, cint)
@@ -87,6 +87,19 @@ index 530dd8ded..420b84d19 100644
        MAX_HISTORY 8
      &END MIXER
    &END PW_DFT
+diff --git a/tests/SIRIUS/regtest-1/Fe_dos.inp b/tests/SIRIUS/regtest-1/Fe_dos.inp
+index f912cdcaa..3bb243f80 100644
+--- a/tests/SIRIUS/regtest-1/Fe_dos.inp
++++ b/tests/SIRIUS/regtest-1/Fe_dos.inp
+@@ -30,7 +30,7 @@
+     &END ITERATIVE_SOLVER
+     &MIXER
+       BETA 0.7
+-      TYPE broyden1
++      TYPE broyden2
+       MAX_HISTORY 8
+     &END MIXER
+     &PRINT
 diff --git a/tests/SIRIUS/regtest-1/He-full-potential.inp b/tests/SIRIUS/regtest-1/He-full-potential.inp
 index 7840555a1..052338299 100644
 --- a/tests/SIRIUS/regtest-1/He-full-potential.inp
@@ -207,7 +220,7 @@ index e3de92022..44a7bdd71 100755
 +#  [ "$with_libvdwxc" = "__DONTUSE__" ] && with_libvdwxc="__INSTALL__"
 +#  [ "$with_cosma" = "__DONTUSE__" ] && with_cosma="__INSTALL__"
  fi
-
+ 
  if [ "$with_plumed" = "__INSTALL__" ]; then
 diff --git a/tools/toolchain/scripts/stage8/install_sirius.sh b/tools/toolchain/scripts/stage8/install_sirius.sh
 index 35bfe461b..9ead1e196 100755
@@ -216,17 +229,17 @@ index 35bfe461b..9ead1e196 100755
 @@ -9,8 +9,8 @@
  [ "${BASH_SOURCE[0]}" ] && SCRIPT_NAME="${BASH_SOURCE[0]}" || SCRIPT_NAME=$0
  SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_NAME")/.." && pwd -P)"
-
+ 
 -sirius_ver="7.0.2"
 -sirius_sha256="ee613607ce3be0b2c3f69b560b2415ce1b0e015179002aa90739430dbfaa0389"
 +sirius_ver="7.2.4"
 +sirius_sha256="aeed0e83b80c3a79a9469e7f3fe10d80ad331795e38dbc3c49cb0308e2bd084d"
-
+ 
  source "${SCRIPT_DIR}"/common_vars.sh
  source "${SCRIPT_DIR}"/tool_kit.sh
 @@ -136,7 +136,7 @@ case "$with_sirius" in
        fi
-
+ 
        CMAKE_PREFIX_PATH="${CMAKE_PREFIX_PATH}:${SPFFT_ROOT}/lib/cmake:${SPFFT_ROOT}/lib64/cmake" \
 -        cmake -DCMAKE_INSTALL_PREFIX=${pkg_install_dir} \
 +        cmake -DCMAKE_INSTALL_PREFIX="${pkg_install_dir}" \
@@ -234,9 +247,9 @@ index 35bfe461b..9ead1e196 100755
          -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="${SIRIUS_DBG}" \
          -DCMAKE_CXX_COMPILER="${MPICXX}" \
 @@ -147,11 +147,11 @@ case "$with_sirius" in
-
+ 
        make -j $(get_nprocs) -C src >> compile.log 2>&1
-
+ 
 -      install -d ${pkg_install_dir}/include >> install.log 2>&1
 -      install -d ${pkg_install_dir}/lib >> install.log 2>&1
 -      cp -R ../src/* ${pkg_install_dir}/include >> install.log 2>&1
@@ -248,7 +261,7 @@ index 35bfe461b..9ead1e196 100755
 +      install -m 644 src/*.a "${pkg_install_dir}/lib" >> install.log 2>&1
 +      install -m 644 src/mod_files/*.mod "${pkg_install_dir}/include" >> install.log 2>&1
        cd ..
-
+ 
        # now do we have cuda as well
 diff --git a/tools/toolchain/scripts/stage8/install_spfft.sh b/tools/toolchain/scripts/stage8/install_spfft.sh
 index e9ae00a2d..cbcbf67ee 100755
@@ -257,7 +270,7 @@ index e9ae00a2d..cbcbf67ee 100755
 @@ -9,8 +9,8 @@
  [ "${BASH_SOURCE[0]}" ] && SCRIPT_NAME="${BASH_SOURCE[0]}" || SCRIPT_NAME=$0
  SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_NAME")/.." && pwd -P)"
-
+ 
 -spfft_ver="0.9.13"
 -spfft_sha256="621543658991782dd184948082c7eea474b6759140f796bb55da2e2f654d3558"
 +spfft_ver="1.0.3"
@@ -272,7 +285,7 @@ index c0de80d96..b5fde95be 100755
 @@ -9,8 +9,8 @@
  [ "${BASH_SOURCE[0]}" ] && SCRIPT_NAME="${BASH_SOURCE[0]}" || SCRIPT_NAME=$0
  SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_NAME")/.." && pwd -P)"
-
+ 
 -spla_ver="1.2.1"
 -spla_sha256="4d7237f752dc6257778c84ee19c9635072b1cb8ce8d9ab6e34a047f63a736b29"
 +spla_ver="1.4.0"
