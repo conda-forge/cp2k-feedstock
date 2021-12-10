@@ -13,7 +13,7 @@
 {% set build_string = "py{}_{}_{}".format(environ.get('CONDA_PY', ''), mpi, build) %}
 
 package:
-  name: {{ name|lower }}
+  name: {{ name|lower }}-pkgs
   version: {{ version }}
 
 source:
@@ -32,43 +32,53 @@ build:
   skip: true  # [not linux]
   string: {{ build_string }}
 
-requirements:
+outputs: 
+  - name: {{ name|lower }}
+    build:
+      skip: true  # [not linux]
+      string: {{ build_string }}
+    requirements:
+      build:
+        - {{ compiler('c') }}
+        - {{ compiler('cxx') }}
+        - {{ compiler('fortran') }}
+        - make
+        - autoconf
+        - automake
+        - cmake
+        - libtool
+        - python
+      host:
+        - {{ mpi }}  # [mpi != 'nompi']
+        - scalapack  # [mpi != 'nompi']
+        - libblas  # [osx]
+        - openblas * *openmp*  # [linux]
+        - liblapack
+        - llvm-openmp  # [osx]
+        - libgomp  # [linux]
+        - libxsmm
+        - fftw
+        - spglib
+        - libxc >=5.1
+        - sirius  # [mpi != 'nompi']
+      run:
+        - {{ mpi }}  # [mpi != 'nompi']
+        - scalapack  # [mpi != 'nompi']
+        - __osx >={{ MACOSX_DEPLOYMENT_TARGET|default("10.9") }}  # [osx and x86_64]
+        - libblas * *openblas  # [linux]
+        - openblas * *openmp*  # [linux]
+    test:
+      commands:
+        # note: regtests are running at the "build" stage; this is just a smoke test
+        - cp2k.ssmp --help  # [mpi == 'nompi']
+        - mpiexec --bind-to none -mca plm isolated cp2k.psmp --help   # [mpi != 'nompi']
+
+- name: {{ name|lower }}-potentials
   build:
-    - {{ compiler('c') }}
-    - {{ compiler('cxx') }}
-    - {{ compiler('fortran') }}
-    - make
-    - autoconf
-    - automake
-    - cmake
-    - libtool
-    - python
-  host:
-    - {{ mpi }}  # [mpi != 'nompi']
-    - scalapack  # [mpi != 'nompi']
-    - libblas  # [osx]
-    - openblas * *openmp*  # [linux]
-    - liblapack
-    - llvm-openmp  # [osx]
-    - libgomp  # [linux]
-    - libxsmm
-    - fftw
-    - spglib
-    - libxc >=5.1
-    - sirius  # [mpi != 'nompi']
-  run:
-    - {{ mpi }}  # [mpi != 'nompi']
-    - scalapack  # [mpi != 'nompi']
-    - __osx >={{ MACOSX_DEPLOYMENT_TARGET|default("10.9") }}  # [osx and x86_64]
-    - libblas * *openblas  # [linux]
-    - openblas * *openmp*  # [linux]
-
-test:
-  commands:
-    # note: regtests are running at the "build" stage; this is just a smoke test
-    - cp2k.ssmp --help  # [mpi == 'nompi']
-    - mpiexec --bind-to none -mca plm isolated cp2k.psmp --help   # [mpi != 'nompi']
-
+    script: mkdir ${PREFIX}/share/cp2k; cp -r data/*  ${PREFIX}/share/cp2k
+  requirements:
+    host:
+    run:
 
 about:
   home: https://www.cp2k.org
