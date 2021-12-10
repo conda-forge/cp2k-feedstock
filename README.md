@@ -1,5 +1,5 @@
-About cp2k
-==========
+About cp2k-pkgs
+===============
 
 Home: https://www.cp2k.org
 
@@ -63,21 +63,22 @@ Current release info
 | Name | Downloads | Version | Platforms |
 | --- | --- | --- | --- |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-cp2k-green.svg)](https://anaconda.org/conda-forge/cp2k) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/cp2k.svg)](https://anaconda.org/conda-forge/cp2k) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/cp2k.svg)](https://anaconda.org/conda-forge/cp2k) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/cp2k.svg)](https://anaconda.org/conda-forge/cp2k) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-cp2k--potentials-green.svg)](https://anaconda.org/conda-forge/cp2k-potentials) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/cp2k-potentials.svg)](https://anaconda.org/conda-forge/cp2k-potentials) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/cp2k-potentials.svg)](https://anaconda.org/conda-forge/cp2k-potentials) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/cp2k-potentials.svg)](https://anaconda.org/conda-forge/cp2k-potentials) |
 
-Installing cp2k
-===============
+Installing cp2k-pkgs
+====================
 
-Installing `cp2k` from the `conda-forge` channel can be achieved by adding `conda-forge` to your channels with:
+Installing `cp2k-pkgs` from the `conda-forge` channel can be achieved by adding `conda-forge` to your channels with:
 
 ```
 conda config --add channels conda-forge
 conda config --set channel_priority strict
 ```
 
-Once the `conda-forge` channel has been enabled, `cp2k` can be installed with:
+Once the `conda-forge` channel has been enabled, `cp2k, cp2k-potentials` can be installed with:
 
 ```
-conda install cp2k
+conda install cp2k cp2k-potentials
 ```
 
 It is possible to list all of the versions of `cp2k` available on your platform with:
@@ -90,7 +91,8 @@ conda search cp2k --channel conda-forge
 About conda-forge
 =================
 
-[![Powered by NumFOCUS](https://img.shields.io/badge/powered%20by-NumFOCUS-orange.svg?style=flat&colorA=E1523D&colorB=007D8A)](http://numfocus.org)
+[![Powered by
+NumFOCUS](https://img.shields.io/badge/powered%20by-NumFOCUS-orange.svg?style=flat&colorA=E1523D&colorB=007D8A)](https://numfocus.org)
 
 conda-forge is a community-led conda channel of installable packages.
 In order to provide high-quality builds, the process has been automated into the
@@ -125,17 +127,17 @@ Terminology
                   produce the finished article (built conda distributions)
 
 
-Updating cp2k-feedstock
-=======================
+Updating cp2k-pkgs-feedstock
+============================
 
-If you would like to improve the cp2k recipe or build a new
+If you would like to improve the cp2k-pkgs recipe or build a new
 package version, please fork this repository and submit a PR. Upon submission,
 your changes will be run on the appropriate platforms to give the reviewer an
 opportunity to confirm that the changes result in a successful build. Once
 merged, the recipe will be re-built and uploaded automatically to the
 `conda-forge` channel, whereupon the built conda packages will be available for
 everybody to install and use from the `conda-forge` channel.
-Note that all branches in the conda-forge/cp2k-feedstock are
+Note that all branches in the conda-forge/cp2k-pkgs-feedstock are
 immediately built and any created packages are uploaded, so PRs should be based
 on branches in forks and branches in the main repository should only be used to
 build distinct package versions.
