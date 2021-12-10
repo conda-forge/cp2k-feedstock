@@ -73,12 +73,13 @@ outputs:
         - cp2k.ssmp --help  # [mpi == 'nompi']
         - mpiexec --bind-to none -mca plm isolated cp2k.psmp --help   # [mpi != 'nompi']
 
-- name: {{ name|lower }}-potentials
-  build:
-    script: mkdir ${PREFIX}/share/cp2k; cp -r data/*  ${PREFIX}/share/cp2k
-  requirements:
-    host:
-    run:
+  - name: {{ name|lower }}-potentials
+    build:
+      skip: true  # [not linux]
+      script: mkdir ${PREFIX}/share/cp2k; cp -r data/*  ${PREFIX}/share/cp2k
+    requirements:
+      host:
+      run:
 
 about:
   home: https://www.cp2k.org
