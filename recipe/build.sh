@@ -1,4 +1,5 @@
 #!/bin/bash
+export FFLAGS="$FFLAGS -fallow-argument-mismatch"
 set -e
 
 echo "Runing with mpi=$mpi and blas=$blas_impl"
