@@ -21,8 +21,6 @@ source:
   sha256: fedb4c684a98ad857cd49b69a3ae51a73f85a9c36e9cb63e3b02320c74454ce6
   patches:
     - macosxtest.patch  # [osx]
-    # remove in release following cp2k 8.2
-    - sirius.patch
 
 build:
   number: {{ build }}
