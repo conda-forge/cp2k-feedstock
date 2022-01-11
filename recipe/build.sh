@@ -23,12 +23,13 @@ make -j${CPU_COUNT} ARCH=${ARCH} VERSION=${VERSION}
 
 # run regression tests
 if [[ "$mpi" == "nompi" ]]; then
-  make ARCH=${ARCH} VERSION=${VERSION} TESTOPTS="--ompthreads 2" test
+  make ARCH=${ARCH} VERSION=${VERSION} TESTOPTS="--ompthreads 2  --restrictdir SE/regtest-3-4" test
 else
   # -mca plm isolated is needed to stop openmpi from looking for ssh
   # See https://github.com/open-mpi/ompi/issues/1838#issuecomment-229914599
-  make ARCH=${ARCH} VERSION=${VERSION} TESTOPTS="--ompthreads 1 --mpiexec 'mpiexec --bind-to none -mca plm isolated'" test
+  make ARCH=${ARCH} VERSION=${VERSION} TESTOPTS="--ompthreads 1 --mpiexec 'mpiexec --bind-to none -mca plm isolated' --restrictdir SE/regtest-3-4" test
 fi
+cat regtesting/*/SE/regtest-3-4/Co_complex.inp.out
 
 # install
 cd ${SRC_DIR}
