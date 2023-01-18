@@ -18,7 +18,7 @@ package:
 
 source:
   url: https://github.com/{{ name }}/{{ name }}/releases/download/v{{ version }}/{{ name }}-{{ version }}.tar.bz2
-  sha256: 10c0e31bc67bd4871c61047c5f990eb6dac44c6237c3a0b75047a99207021986
+  sha256: 2c34f1a7972973c62d471cd35856f444f11ab22f2ff930f6ead20f3454fd228b
   patches:
     - macosxtest.patch  # [osx]
 
