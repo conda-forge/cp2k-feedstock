@@ -17,7 +17,7 @@ package:
   version: {{ version }}
 
 source:
-  url: https://github.com/{{ name }}/{{ name }}/releases/download/v{{ version }}/{{ name }}-{{ version[:-2] }}.tar.bz2
+  url: https://github.com/{{ name }}/{{ name }}/releases/download/v{{ version }}/{{ name }}-{{ version }}.tar.bz2
   sha256: 10c0e31bc67bd4871c61047c5f990eb6dac44c6237c3a0b75047a99207021986
   patches:
     - macosxtest.patch  # [osx]
