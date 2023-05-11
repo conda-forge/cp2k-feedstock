@@ -25,11 +25,17 @@ liblapack:
 libxsmm:
 - '1'
 mpi:
-- openmpi
+- nompi
 mpich:
 - '4'
 openmpi:
 - '4'
+pin_run_as_build:
+  python:
+    min_pin: x.x
+    max_pin: x.x
+python:
+- 3.10.* *_cpython
 target_platform:
 - linux-64
 zip_keys:
