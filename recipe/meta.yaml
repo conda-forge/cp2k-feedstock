@@ -10,8 +10,6 @@
 {% set build = build + 1000 %}
 {% endif %}
 
-{% set build_string = "py{}_{}_{}".format(environ.get('CONDA_PY', ''), mpi, build) %}
-
 package:
   name: {{ name|lower }}
   version: {{ version }}
@@ -28,7 +26,8 @@ build:
   # - nompi: osx issue introduced in 8.1, fixed in future 8.2
   # - openmpi: runtime failures during test suite
   skip: true  # [not linux]
-  string: {{ build_string }}
+  string: h{{ PKG_HASH }}_{{ mpi }}_{{ build }} 
+  noarch: generic 
 
 requirements:
   build:
