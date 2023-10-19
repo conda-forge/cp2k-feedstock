@@ -1,5 +1,5 @@
 {% set name = "cp2k" %}
-{% set version = "2023.2" %}
+{% set version = "2024.1" %}
 
 # Define build matrix for MPI vs. non-mpi
 # ensure mpi is defined (needed for conda-smithy recipe-lint)
@@ -17,7 +17,7 @@ package:
 
 source:
   - url: https://github.com/{{ name }}/{{ name }}/releases/download/v{{ version }}/{{ name }}-{{ version }}.tar.bz2
-    sha256: adbcc903c1a78cba98f49fe6905a62b49f12e3dfd7cedea00616d1a5f50550db
+    sha256: a7abf149a278dfd5283dc592a2c4ae803b37d040df25d62a5e35af5c4557668f
     patches:
       - macosxtest.patch  # [osx]
   - url: https://github.com/cp2k/dbcsr/releases/download/v2.6.0/dbcsr-2.6.0.tar.gz
@@ -31,8 +31,8 @@ build:
   # - nompi: osx issue introduced in 8.1, fixed in future 8.2
   # - openmpi: runtime failures during test suite
   skip: true  # [not linux]
-  # For version 2023.2 the tests fail with segmentation fault with MKL and OpenMPI
-  # in line 452 of cp_basic_linalg.f, i.e.
+  # For version 2024.1 the tests fail with segmentation fault with MKL and OpenMPI
+  # in line 455 of cp_basic_linalg.f, i.e.
   #          CALL pdgemm(transa, transb, m, n, k, alpha, a, i_a, j_a, desca, b, i_b, j_b, &
   #                   descb, beta, c, i_c, j_c, descc)
   # (specific to scalapack MKL and tested as failing for MKL 2019 until 2024

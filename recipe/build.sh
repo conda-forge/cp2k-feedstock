@@ -26,10 +26,30 @@ else
  CP2K_USE_MPI=ON
  CP2K_VERSION=psmp
 fi
+
+export PKG_CONFIG_PATH=$PREFIX/lib:$PKG_CONFIG_PATH
+
+mkdir -p build_dbcsr
+pushd build_dbcsr
+
+cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} \
+      -DCMAKE_BUILD_TYPE=Release \
+      -DCMAKE_INSTALL_LIBDIR=lib \
+      -DCMAKE_FIND_FRAMEWORK=NEVER \
+      -DCMAKE_FIND_APPBUNDLE=NEVER \
+      -DUSE_MPI=$CP2K_USE_MPI \
+      -DUSE_SMM=libxsmm \
+      ${CMAKE_ARGS} \
+      ../exts/dbcsr
+
+cmake --build . --config Release -j 2
+make install
+
+popd #build_dbcsr
+
 mkdir -p build
 pushd build
 
-export PKG_CONFIG_PATH=$PREFIX/lib:$PKG_CONFIG_PATH
 cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} \
       -DCMAKE_BUILD_TYPE=Release \
       -DCMAKE_INSTALL_LIBDIR=lib \
@@ -37,7 +57,7 @@ cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} \
       -DCMAKE_FIND_APPBUNDLE=NEVER \
       -DCP2K_ENABLE_REGTESTS=ON \
       -DPython3_EXECUTABLE="$PYTHON" \
-      -DCP2K_BUILD_DBCSR=ON \
+      -DCP2K_BUILD_DBCSR=OFF \
       -DCP2K_USE_MPI=$CP2K_USE_MPI \
       -DCP2K_BLAS_VENDOR=$BLAS_VENDOR \
       -DCP2K_SCALAPACK_VENDOR=$SCALAPACK_VENDOR \
@@ -58,7 +78,7 @@ export CP2K_DATA_DIR=$PWD/data
 
 if [ "$CP2K_USE_MPI" == "ON" ]
 then
-    python ./tools/regtesting/do_regtest.py cmake_build_cpu ${CP2K_VERSION} --smoketest --mpiexec 'mpiexec --bind-to none -mca plm isolated' --ompthreads 1
+    python ./tests/do_regtest.py local ${CP2K_VERSION} --smoketest --mpiexec 'mpiexec --bind-to none -mca plm isolated' --ompthreads 1
 else
-    python ./tools/regtesting/do_regtest.py cmake_build_cpu ${CP2K_VERSION} --smoketest --ompthreads 2
+    python ./tests/do_regtest.py local ${CP2K_VERSION} --smoketest --ompthreads 2
 fi
