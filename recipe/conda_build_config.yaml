@@ -1,6 +1,8 @@
 mpi:
   - openmpi
   - nompi
+blas_impl:
+  - openblas
 
 MACOSX_DEPLOYMENT_TARGET:  # [osx and x86_64]
   - '10.12'                # [osx and x86_64]

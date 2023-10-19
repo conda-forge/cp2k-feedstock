@@ -1,5 +1,5 @@
 {% set name = "cp2k" %}
-{% set version = "9.1.0" %}
+{% set version = "2023.2" %}
 
 # Define build matrix for MPI vs. non-mpi
 # ensure mpi is defined (needed for conda-smithy recipe-lint)
@@ -10,25 +10,27 @@
 {% set build = build + 1000 %}
 {% endif %}
 
-{% set build_string = "py{}_{}_{}".format(environ.get('CONDA_PY', ''), mpi, build) %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  url: https://github.com/{{ name }}/{{ name }}/releases/download/v{{ version }}/{{ name }}-{{ version[:-2] }}.tar.bz2
-  sha256: fedb4c684a98ad857cd49b69a3ae51a73f85a9c36e9cb63e3b02320c74454ce6
-  patches:
-    - macosxtest.patch  # [osx]
+  - url: https://github.com/{{ name }}/{{ name }}/releases/download/v{{ version }}/{{ name }}-{{ version }}.tar.bz2
+    sha256: adbcc903c1a78cba98f49fe6905a62b49f12e3dfd7cedea00616d1a5f50550db
+    patches:
+      - macosxtest.patch  # [osx]
+  - url: https://github.com/cp2k/dbcsr/releases/download/v2.6.0/dbcsr-2.6.0.tar.gz
+    sha256: c67b02ff9abc7c1f529af446a9f01f3ef9e5b0574f220259128da8d5ca7e9dc6
+    folder: exts/dbcsr
 
 build:
   number: {{ build }}
+  string: {{ blas_impl }}_{{ mpi }}_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
   # osx build skipped until futher notice:
   # - nompi: osx issue introduced in 8.1, fixed in future 8.2
   # - openmpi: runtime failures during test suite
   skip: true  # [not linux]
-  string: {{ build_string }}
 
 requirements:
   build:
@@ -36,30 +38,29 @@ requirements:
     - {{ compiler('cxx') }}
     - {{ compiler('fortran') }}
     - make
-    - autoconf
-    - automake
+    - fypp
+    - llvm-openmp  # [osx]
+    - libgomp  # [linux]
     - cmake
     - libtool
     - python
   host:
     - {{ mpi }}  # [mpi != 'nompi']
     - scalapack  # [mpi != 'nompi']
-    - libblas  # [osx]
-    - openblas * *openmp*  # [linux]
-    - liblapack
-    - llvm-openmp  # [osx]
-    - libgomp  # [linux]
-    - libxsmm
+    - {{ blas_impl }}
     - fftw
     - spglib
     - libxc >=5.1
+    - libint >=2.8.1
+    - libxsmm
     - sirius  # [mpi != 'nompi']
   run:
     - {{ mpi }}  # [mpi != 'nompi']
-    - scalapack  # [mpi != 'nompi']
+    - libblas * *{{ blas_impl }}
+    - libcblas * *{{ blas_impl }}
+    - liblapack * *{{ blas_impl }}
+    - scalapack  # [mpi != 'nompi' and blas_impl != 'mkl']
     - __osx >={{ MACOSX_DEPLOYMENT_TARGET|default("10.9") }}  # [osx and x86_64]
-    - libblas * *openblas  # [linux]
-    - openblas * *openmp*  # [linux]
 
 test:
   commands:
