@@ -31,6 +31,12 @@ build:
   # - nompi: osx issue introduced in 8.1, fixed in future 8.2
   # - openmpi: runtime failures during test suite
   skip: true  # [not linux]
+  # For version 2023.2 the tests fail with segmentation fault with MKL and OpenMPI
+  # in line 452 of cp_basic_linalg.f, i.e.
+  #          CALL pdgemm(transa, transb, m, n, k, alpha, a, i_a, j_a, desca, b, i_b, j_b, &
+  #                   descb, beta, c, i_c, j_c, descc)
+  # (specific to scalapack MKL and tested as failing for MKL 2019 until 2024
+  skip: true  # [mpi == 'openmpi' and blas_impl == 'mkl']
 
 requirements:
   build:
@@ -47,7 +53,8 @@ requirements:
   host:
     - {{ mpi }}  # [mpi != 'nompi']
     - scalapack  # [mpi != 'nompi']
-    - {{ blas_impl }}
+    - {{ blas_impl }}  # [blas_impl != 'mkl']
+    - mkl-devel  # [blas_impl == 'mkl']
     - fftw
     - spglib
     - libxc >=5.1

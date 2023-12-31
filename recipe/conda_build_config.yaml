@@ -3,6 +3,7 @@ mpi:
   - nompi
 blas_impl:
   - openblas
+  - mkl
 
 MACOSX_DEPLOYMENT_TARGET:  # [osx and x86_64]
   - '10.12'                # [osx and x86_64]

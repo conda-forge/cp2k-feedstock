@@ -12,6 +12,13 @@ else
   ARCH=Linux-x86-64-conda
 fi
 
+if [[ "$blas_impl" == "mkl" ]]; then
+    BLAS_VENDOR="MKL"
+    SCALAPACK_VENDOR="MKL"
+else
+    BLAS_VENDOR="OpenBLAS"
+    SCALAPACK_VENDOR="GENERIC"
+fi
 if [[ "$mpi" == "nompi" ]]; then
  CP2K_USE_MPI=OFF
  CP2K_VERSION=ssmp
@@ -32,8 +39,8 @@ cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} \
       -DPython3_EXECUTABLE="$PYTHON" \
       -DCP2K_BUILD_DBCSR=ON \
       -DCP2K_USE_MPI=$CP2K_USE_MPI \
-      -DCP2K_BLAS_VENDOR=OpenBLAS \
-      -DCP2K_SCALAPACK_VENDOR=GENERIC \
+      -DCP2K_BLAS_VENDOR=$BLAS_VENDOR \
+      -DCP2K_SCALAPACK_VENDOR=$SCALAPACK_VENDOR \
       -DCP2K_USE_FFTW3=ON \
       -DCP2K_USE_LIBXC=ON \
       -DCP2K_USE_LIBINT2=ON \
