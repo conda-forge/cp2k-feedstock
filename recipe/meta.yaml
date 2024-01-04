@@ -4,7 +4,7 @@
 # Define build matrix for MPI vs. non-mpi
 # ensure mpi is defined (needed for conda-smithy recipe-lint)
 {% set mpi = mpi or 'nompi' %}
-{% set build = 0 %}
+{% set build = 1 %}
 {% if mpi == 'nompi' %}
 # prioritize 'nompi' variant via build number
 {% set build = build + 1000 %}
@@ -37,6 +37,7 @@ build:
   #                   descb, beta, c, i_c, j_c, descc)
   # (specific to scalapack MKL and tested as failing for MKL 2019 until 2024
   skip: true  # [mpi == 'openmpi' and blas_impl == 'mkl']
+  noarch: python
 
 requirements:
   build:
