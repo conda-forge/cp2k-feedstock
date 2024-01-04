@@ -1,7 +1,9 @@
+blas_impl:
+- mkl
 c_compiler:
 - gcc
 c_compiler_version:
-- '10'
+- '12'
 cdt_name:
 - cos6
 channel_sources:
@@ -11,7 +13,7 @@ channel_targets:
 cxx_compiler:
 - gxx
 cxx_compiler_version:
-- '10'
+- '12'
 docker_image:
 - quay.io/condaforge/linux-anvil-cos7-x86_64
 fftw:
@@ -19,20 +21,17 @@ fftw:
 fortran_compiler:
 - gfortran
 fortran_compiler_version:
-- '10'
-liblapack:
-- 3.8 *netlib
+- '12'
 libxsmm:
 - '1'
+mkl_devel:
+- '2023'
 mpi:
 - openmpi
 mpich:
 - '4'
 openmpi:
 - '4'
-pin_run_as_build:
-  fftw:
-    max_pin: x
 target_platform:
 - linux-64
 zip_keys:
