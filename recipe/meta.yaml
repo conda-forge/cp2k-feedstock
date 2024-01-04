@@ -4,7 +4,7 @@
 # Define build matrix for MPI vs. non-mpi
 # ensure mpi is defined (needed for conda-smithy recipe-lint)
 {% set mpi = mpi or 'nompi' %}
-{% set build = 0 %}
+{% set build = 1 %}
 {% if mpi == 'nompi' %}
 # prioritize 'nompi' variant via build number
 {% set build = build + 1000 %}
@@ -26,7 +26,7 @@ source:
 
 build:
   number: {{ build }}
-  string: {{ blas_impl }}_{{ mpi }}_py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
+  string: {{ blas_impl }}_{{ mpi }}_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
   # osx build skipped until futher notice:
   # - nompi: osx issue introduced in 8.1, fixed in future 8.2
   # - openmpi: runtime failures during test suite
