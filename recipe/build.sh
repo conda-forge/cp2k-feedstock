@@ -1,5 +1,5 @@
-#!/bin/bash -x
-set -e
+#!/bin/bash
+set -ex
 
 echo "Runing with mpi=$mpi and blas=$blas_impl"
 
@@ -32,17 +32,25 @@ export PKG_CONFIG_PATH=$PREFIX/lib:$PKG_CONFIG_PATH
 mkdir -p build_dbcsr
 pushd build_dbcsr
 
+if [[ $(uname -m) == "x86_64" ]]; then
+  SMM="-DUSE_SMM=libxsmm"
+  USE_LIBXSMM="ON"
+else
+  SMM=""
+  USE_LIBXSMM="OFF"
+fi
+
 cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} \
       -DCMAKE_BUILD_TYPE=Release \
       -DCMAKE_INSTALL_LIBDIR=lib \
       -DCMAKE_FIND_FRAMEWORK=NEVER \
       -DCMAKE_FIND_APPBUNDLE=NEVER \
       -DUSE_MPI=$CP2K_USE_MPI \
-      -DUSE_SMM=libxsmm \
+      ${SMM} \
       ${CMAKE_ARGS} \
       ../exts/dbcsr
 
-cmake --build . --config Release -j 2
+cmake --build . --config Release -j ${CPU_COUNT}
 make install
 
 popd #build_dbcsr
@@ -64,11 +72,11 @@ cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} \
       -DCP2K_USE_FFTW3=ON \
       -DCP2K_USE_LIBXC=ON \
       -DCP2K_USE_LIBINT2=ON \
-      -DCP2K_USE_LIBXSMM=ON \
+      -DCP2K_USE_LIBXSMM=${USE_LIBXSMM} \
       ${CMAKE_ARGS} \
       ..
 
-cmake --build . --config Release -j 2
+cmake --build . --config Release -j ${CPU_COUNT}
 
 make install
 popd

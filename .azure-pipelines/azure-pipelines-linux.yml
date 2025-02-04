@@ -8,22 +8,30 @@ jobs:
     vmImage: ubuntu-latest
   strategy:
     matrix:
-      linux_64_blas_implmklmpinompi:
-        CONFIG: linux_64_blas_implmklmpinompi
-        UPLOAD_PACKAGES: 'True'
-        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
-      linux_64_blas_implmklmpiopenmpi:
-        CONFIG: linux_64_blas_implmklmpiopenmpi
-        UPLOAD_PACKAGES: 'True'
-        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
       linux_64_blas_implopenblasmpinompi:
         CONFIG: linux_64_blas_implopenblasmpinompi
         UPLOAD_PACKAGES: 'True'
-        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
+        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma9
       linux_64_blas_implopenblasmpiopenmpi:
         CONFIG: linux_64_blas_implopenblasmpiopenmpi
         UPLOAD_PACKAGES: 'True'
-        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
+        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma9
+      linux_aarch64_blas_implopenblasmpinompi:
+        CONFIG: linux_aarch64_blas_implopenblasmpinompi
+        UPLOAD_PACKAGES: 'True'
+        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma9
+      linux_aarch64_blas_implopenblasmpiopenmpi:
+        CONFIG: linux_aarch64_blas_implopenblasmpiopenmpi
+        UPLOAD_PACKAGES: 'True'
+        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma9
+      linux_ppc64le_blas_implopenblasmpinompi:
+        CONFIG: linux_ppc64le_blas_implopenblasmpinompi
+        UPLOAD_PACKAGES: 'True'
+        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma9
+      linux_ppc64le_blas_implopenblasmpiopenmpi:
+        CONFIG: linux_ppc64le_blas_implopenblasmpiopenmpi
+        UPLOAD_PACKAGES: 'True'
+        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma9
   timeoutInMinutes: 360
   variables: {}
 
