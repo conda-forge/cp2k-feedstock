@@ -53,6 +53,7 @@ requirements:
     - cmake
     - libtool
     - python
+    - pkg-config
   host:
     - {{ mpi }}  # [mpi != 'nompi']
     - scalapack  # [mpi != 'nompi']
