@@ -48,6 +48,7 @@ requirements:
     - llvm-openmp  # [osx]
     - libgomp  # [linux]
     - cmake
+    - pkgconfig
     - libtool
     - python
   host:
