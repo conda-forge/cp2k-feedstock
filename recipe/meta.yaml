@@ -1,5 +1,5 @@
 {% set name = "cp2k" %}
-{% set version = "2024.2" %}
+{% set version = "2026.1" %}
 
 # Define build matrix for MPI vs. non-mpi
 # ensure mpi is defined (needed for conda-smithy recipe-lint)
@@ -16,8 +16,8 @@ package:
   version: {{ version }}
 
 source:
-  - url: https://github.com/{{ name }}/{{ name }}/releases/download/v{{ version }}/{{ name }}-{{ version }}.tar.bz2
-    sha256: cc3e56c971dee9e89b705a1103765aba57bf41ad39a11c89d3de04c8b8cdf473
+  - url: https://github.com/{{ name }}/{{ name }}/archive/v{{ version }}.tar.gz
+    sha256: 8a89986621d9c6f1d835d52dfa1e028cf08a934169a21b5989408f74232ccef7
     patches:
       - macosxtest.patch  # [osx]
   - url: https://github.com/cp2k/dbcsr/releases/download/v2.6.0/dbcsr-2.6.0.tar.gz
