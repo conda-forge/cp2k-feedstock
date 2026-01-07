@@ -59,7 +59,7 @@ requirements:
     - fftw
     - spglib
     - libxc >=5.1
-    - libint >=2.9.0
+    - libint-fortran-devel >=2.9.0
     - libxsmm
     - sirius  # [mpi != 'nompi']
   run:
