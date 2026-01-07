@@ -58,7 +58,7 @@ requirements:
     - mkl-devel  # [blas_impl == 'mkl']
     - fftw
     - spglib
-    - libxc >=5.1
+    - libxc >=5.1,<7.0  # last successful build used v6.2.2
     - libint-fortran-devel >=2.9.0
     - libxsmm
     - sirius  # [mpi != 'nompi']
