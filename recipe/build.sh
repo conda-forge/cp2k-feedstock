@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ex
+set -x
 
 # Build CP2K
 export PKG_CONFIG_PATH=${PREFIX}/lib:${PKG_CONFIG_PATH}
