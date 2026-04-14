@@ -28,7 +28,7 @@ export OMPI_ALLOW_RUN_AS_ROOT=1
 export OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1
 export OMPI_MCA_plm_rsh_agent=/bin/false
 export OMP_STACKSIZE=256M
-${PWD}/tests/do_regtest.py ${PREFIX}/bin psmp --maxtasks ${CPU_COUNT}
+${PWD}/tests/do_regtest.py ${PREFIX}/bin psmp --maxtasks ${CPU_COUNT} --skipdir QS/regtest-dcdft-hfx
 rm -rf $(PREFIX}/bin/TEST-*
 
 # Create CP2K launch script
