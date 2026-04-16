@@ -20,6 +20,7 @@ cmake -B build -S . \
   -DCP2K_USE_SPGLIB="ON"
 cmake --build build --parallel "${CPU_COUNT}"
 cmake --install build
+ln -sf cp2k.psmp "${PREFIX}/bin/cp2k.popt"
 ln -sf cp2k.psmp "${PREFIX}/bin/cp2k"
 
 # Run CP2K regression tests

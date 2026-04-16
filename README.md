@@ -148,5 +148,6 @@ Feedstock Maintainers
 
 * [@jan-janssen](https://github.com/jan-janssen/)
 * [@ltalirz](https://github.com/ltalirz/)
+* [@mkrack](https://github.com/mkrack/)
 * [@oschuett](https://github.com/oschuett/)
 

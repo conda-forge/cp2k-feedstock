@@ -32,17 +32,13 @@ requirements:
     - "fftw >=3.3.10 *openmpi_*"
     - libint >=2.6.0
     - libint-fortran-devel >=2.6.0
-    - libxc >=7.0.0
+    - "libxc >=7.0.0 *cpu_*"
     - "openblas >=0.3.30 *openmp_*"
     - openmpi >=5.0.8
     - scalapack >=2.2.0
     - spglib >=2.5.0
   run:
-    - elpa
-    - fftw
-    - openblas
-    - openmpi
-    - scalapack
+    - "openblas >=0.3.30 *openmp_*"
 
 test:
   commands:
@@ -68,3 +64,4 @@ extra:
     - jan-janssen
     - oschuett
     - ltalirz
+    - mkrack
