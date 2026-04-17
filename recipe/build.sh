@@ -13,11 +13,14 @@ cmake -B build -S . \
   -DCP2K_USE_EVERYTHING="OFF" \
   -DCP2K_USE_ELPA="ON" \
   -DCP2K_USE_FFTW3="ON" \
+  -DCP2K_USE_HDF5="ON" \
   -DCP2K_USE_LIBINT2="ON" \
   -DCP2K_USE_LIBXC="ON" \
   -DCP2K_USE_MPI="ON" \
   -DCP2K_USE_MPI_F08="ON" \
-  -DCP2K_USE_SPGLIB="ON"
+  -DCP2K_USE_PLUMED="ON" \
+  -DCP2K_USE_SPGLIB="ON" \
+  -DCP2K_USE_TREXIO="ON"
 cmake --build build --parallel "${CPU_COUNT}"
 cmake --install build
 ln -sf cp2k.psmp "${PREFIX}/bin/cp2k.popt"
