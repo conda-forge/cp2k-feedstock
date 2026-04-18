@@ -3,7 +3,7 @@ About cp2k-feedstock
 
 Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/cp2k-feedstock/blob/main/LICENSE.txt)
 
-Home: https://www.cp2k.org
+Home: https://www.cp2k.org/
 
 Package license: GPL-2.0-only
 
@@ -11,18 +11,56 @@ Summary: Quantum chemistry and solid state physics software package
 
 Development: https://github.com/cp2k/cp2k
 
-Documentation: https://manual.cp2k.org
+Documentation: https://manual.cp2k.org/
 
-CP2K is a quantum chemistry and solid state physics software package
-that can perform atomistic simulations of solid state, liquid,
+CP2K is a quantum chemistry and solid state physics software package 
+that can perform atomistic simulations of solid state, liquid, 
 molecular, periodic, material, crystal, and biological systems.
-
 
 Current build status
 ====================
 
 
 <table>
+    
+  <tr>
+    <td>Azure</td>
+    <td>
+      <details>
+        <summary>
+          <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=7705&branchName=main">
+            <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/cp2k-feedstock?branchName=main">
+          </a>
+        </summary>
+        <table>
+          <thead><tr><th>Variant</th><th>Status</th></tr></thead>
+          <tbody><tr>
+              <td>linux_64</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=7705&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/cp2k-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_64_" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>linux_aarch64</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=7705&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/cp2k-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_aarch64_" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>osx_64</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=7705&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/cp2k-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_64_" alt="variant">
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </details>
+    </td>
+  </tr>
 </table>
 
 Current release info
