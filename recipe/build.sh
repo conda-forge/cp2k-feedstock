@@ -32,19 +32,7 @@ export OMPI_ALLOW_RUN_AS_ROOT=1
 export OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1
 export OMPI_MCA_plm_rsh_agent=/bin/false
 export OMP_STACKSIZE=256M
-arch="$(uname -m)"
-case "${arch}" in
-  x86_64|amd64)
-    "${PWD}/tests/do_regtest.py" "${PREFIX}/bin" "psmp" \
-      --maxtasks "${CPU_COUNT}" \
-      --skipdir "QS/regtest-dcdft-hfx" \
-      --workbasedir "${BUILD_PREFIX}"
-    ;;
-  *)
-    "${PWD}/tests/do_regtest.py" "${PREFIX}/bin" "psmp" \
-      --maxtasks "${CPU_COUNT}" \
-      --skipdir "QS/regtest-dcdft-hfx" \
-      --smoketest \
-      --workbasedir "${BUILD_PREFIX}"
-    ;;
-esac
+"${PWD}/tests/do_regtest.py" "${PREFIX}/bin" "psmp" \
+  --maxtasks "${CPU_COUNT}" \
+  --skipdir "QS/regtest-dcdft-hfx" \
+  --workbasedir "${BUILD_PREFIX}"
