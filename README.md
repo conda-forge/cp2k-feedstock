@@ -3,7 +3,7 @@ About cp2k-feedstock
 
 Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/cp2k-feedstock/blob/main/LICENSE.txt)
 
-Home: https://www.cp2k.org
+Home: https://www.cp2k.org/
 
 Package license: GPL-2.0-only
 
@@ -11,12 +11,11 @@ Summary: Quantum chemistry and solid state physics software package
 
 Development: https://github.com/cp2k/cp2k
 
-Documentation: https://manual.cp2k.org
+Documentation: https://manual.cp2k.org/
 
-CP2K is a quantum chemistry and solid state physics software package
-that can perform atomistic simulations of solid state, liquid,
+CP2K is a quantum chemistry and solid state physics software package 
+that can perform atomistic simulations of solid state, liquid, 
 molecular, periodic, material, crystal, and biological systems.
-
 
 Current build status
 ====================

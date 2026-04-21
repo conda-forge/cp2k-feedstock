@@ -1,66 +1,76 @@
-{% set name = "cp2k" %}
-{% set version = "2026.1" %}
+schema_version: 1
+
+context:
+  name: cp2k
+  version: "2026.1"
+  mpi: openmpi
+  mpi_prefix: "mpi_${{ mpi }}"
 
 package:
-  name: {{ name|lower }}
-  version: "{{ version }}"
+  name: ${{ name|lower }}
+  version: ${{ version }}
 
 source:
-  - url: https://github.com/{{ name }}/{{ name }}/releases/download/v{{ version }}/{{ name }}-{{ version }}.tar.bz2
+  - url: https://github.com/${{ name }}/${{ name }}/releases/download/v${{ version }}/${{ name }}-${{ version }}.tar.bz2
     sha256: 4364c74bcffaa474bc234e11686b09550e4d06932acf2147a341e4f7679dd88e
 
 build:
-  number: 3
-  skip: true  # [not linux]
+  number: 4
+  script: build.sh
+  skip:
+    - aarch64
+    - osx
+    - win
 
 requirements:
   build:
-    - {{ compiler("c") }}
-    - {{ stdlib("c") }}
-    - {{ compiler("cxx") }}
-    - {{ compiler("fortran") }}
+    - ${{ compiler("c") }}
+    - ${{ stdlib("c") }}
+    - ${{ compiler("cxx") }}
+    - ${{ compiler("fortran") }}
     - cmake >=3.27
-    - libgomp  # [linux]
-    - llvm-openmp  # [osx]
+    - if: linux
+      then: libgomp
+    - if: osx
+      then: llvm-openmp
     - ninja >=1.13
     - openmpi-mpifort >=5.0.8
     - pkgconfig >=1.6
     - python >=3.11
   host:
     - dbcsr >=2.9.0
-    - "elpa >=2024.05.001 *openmpi_*"
-    - "fftw >=3.3.10 *openmpi_*"
+    - "elpa >=2024.05.001 *${{ mpi_prefix }}_*"
+    - "fftw >=3.3.10 *${{ mpi_prefix }}_*"
     - hdf5 ~=1.14
     - libint >=2.6.0
     - libint-fortran-devel >=2.6.0
     - "libxc >=7.0.0 *cpu_*"
     - "openblas >=0.3.30 *openmp_*"
-    - openmpi >=5.0.8
-    - "plumed >=2.9.2 *openmpi_*"
+    - openmpi ~=5.0
+    - "plumed >=2.9.2 *${{ mpi_prefix }}_*"
     - scalapack >=2.2.0
     - spglib >=2.5
     - trexio >2.6
   run:
     - "openblas >=0.3.30 *openmp_*"
 
-test:
-  commands:
-    - cp2k -v
-    - cp2k -h
+tests:
+  - package_contents:
+      bin:
+        - cp2k.psmp
 
 about:
-  home: https://www.cp2k.org
+  homepage: https://www.cp2k.org
   license: GPL-2.0-only
   license_family: GPL
   license_file: LICENSE
   summary: Quantum chemistry and solid state physics software package
-
   description: |
     CP2K is a quantum chemistry and solid state physics software package 
     that can perform atomistic simulations of solid state, liquid, 
     molecular, periodic, material, crystal, and biological systems. 
-  doc_url: https://manual.cp2k.org
-  dev_url: https://github.com/cp2k/cp2k
+  documentation: https://manual.cp2k.org
+  repository: https://github.com/cp2k/cp2k
 
 extra:
   recipe-maintainers:
