@@ -3,7 +3,6 @@ schema_version: 1
 context:
   name: cp2k
   version: "2026.1"
-  mpi: openmpi
   mpi_prefix: "mpi_${{ mpi }}"
 
 package:
@@ -15,12 +14,11 @@ source:
     sha256: 4364c74bcffaa474bc234e11686b09550e4d06932acf2147a341e4f7679dd88e
 
 build:
-  number: 4
+  number: 5
   script: build.sh
   skip:
-    - aarch64
-    - osx
-    - win
+    - if: aarch64 or osx or win
+      then: true
 
 requirements:
   build:
@@ -29,29 +27,26 @@ requirements:
     - ${{ compiler("cxx") }}
     - ${{ compiler("fortran") }}
     - cmake >=3.27
-    - if: linux
-      then: libgomp
-    - if: osx
-      then: llvm-openmp
     - ninja >=1.13
-    - openmpi-mpifort >=5.0.8
     - pkgconfig >=1.6
-    - python >=3.11
   host:
+    - ${{ mpi }} >=5
     - dbcsr >=2.9.0
-    - "elpa >=2024.05.001 *${{ mpi_prefix }}_*"
     - "fftw >=3.3.10 *${{ mpi_prefix }}_*"
     - hdf5 ~=1.14
     - libint >=2.6.0
     - libint-fortran-devel >=2.6.0
     - "libxc >=7.0.0 *cpu_*"
     - "openblas >=0.3.30 *openmp_*"
-    - openmpi ~=5.0
-    - "plumed >=2.9.2 *${{ mpi_prefix }}_*"
     - scalapack >=2.2.0
     - spglib >=2.5
     - trexio >2.6
+    - if: mpi == "openmpi"
+      then:
+        - "elpa >=2024.05.001 *${{ mpi_prefix }}_*"
+        - "plumed >=2.9.2 *${{ mpi_prefix }}_*"
   run:
+    - ${{ mpi }} >=5
     - "openblas >=0.3.30 *openmp_*"
 
 tests:

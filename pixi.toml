@@ -5,7 +5,7 @@
 
 [workspace]
 name = "cp2k-feedstock"
-version = "3.60.0"  # conda-smithy version used to generate this file
+version = "3.61.2"  # conda-smithy version used to generate this file
 description = "Pixi configuration for conda-forge/cp2k-feedstock"
 authors = ["@conda-forge/cp2k"]
 channels = ["conda-forge"]
@@ -23,12 +23,18 @@ description = "List contents of all packages found in rattler-build build direct
 [tasks.build]
 cmd = "rattler-build build --recipe recipe"
 description = "Build cp2k-feedstock directly (without setup scripts), no particular variant specified"
-[tasks."build-linux_64_"]
-cmd = "rattler-build build --recipe recipe -m .ci_support/linux_64_.yaml"
-description = "Build cp2k-feedstock with variant linux_64_ directly (without setup scripts)"
-[tasks."inspect-linux_64_"]
-cmd = "inspect_artifacts --recipe-dir recipe -m .ci_support/linux_64_.yaml"
-description = "List contents of cp2k-feedstock packages built for variant linux_64_"
+[tasks."build-linux_64_mpimpich"]
+cmd = "rattler-build build --recipe recipe -m .ci_support/linux_64_mpimpich.yaml"
+description = "Build cp2k-feedstock with variant linux_64_mpimpich directly (without setup scripts)"
+[tasks."inspect-linux_64_mpimpich"]
+cmd = "inspect_artifacts --recipe-dir recipe -m .ci_support/linux_64_mpimpich.yaml"
+description = "List contents of cp2k-feedstock packages built for variant linux_64_mpimpich"
+[tasks."build-linux_64_mpiopenmpi"]
+cmd = "rattler-build build --recipe recipe -m .ci_support/linux_64_mpiopenmpi.yaml"
+description = "Build cp2k-feedstock with variant linux_64_mpiopenmpi directly (without setup scripts)"
+[tasks."inspect-linux_64_mpiopenmpi"]
+cmd = "inspect_artifacts --recipe-dir recipe -m .ci_support/linux_64_mpiopenmpi.yaml"
+description = "List contents of cp2k-feedstock packages built for variant linux_64_mpiopenmpi"
 
 [feature.smithy.dependencies]
 conda-smithy = "*"
