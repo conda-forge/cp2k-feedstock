@@ -14,8 +14,9 @@ source:
     sha256: 4364c74bcffaa474bc234e11686b09550e4d06932acf2147a341e4f7679dd88e
 
 build:
-  number: 5
+  number: 6
   script: build.sh
+  string: mpi_${{ mpi }}_h${{ hash }}_${{ build_number }}
   skip:
     - if: aarch64 or osx or win
       then: true
@@ -26,33 +27,50 @@ requirements:
     - ${{ stdlib("c") }}
     - ${{ compiler("cxx") }}
     - ${{ compiler("fortran") }}
+    - ${{ mpi }}
     - cmake >=3.27
     - ninja >=1.13
-    - pkgconfig >=1.6
+    - pkg-config
   host:
-    - ${{ mpi }} >=5
-    - dbcsr >=2.9.0
-    - "fftw >=3.3.10 *${{ mpi_prefix }}_*"
-    - hdf5 ~=1.14
-    - libint >=2.6.0
-    - libint-fortran-devel >=2.6.0
+    - ${{ mpi }}
+    - "dbcsr >=2.9 *${{ mpi_prefix }}_*"
+    - "fftw * *${{ mpi_prefix }}_*"
+    - hdf5
+    - libint
+    - libint-fortran-devel
     - "libxc >=7.0.0 *cpu_*"
-    - "openblas >=0.3.30 *openmp_*"
-    - scalapack >=2.2.0
-    - spglib >=2.5
-    - trexio >2.6
+    - "openblas * *openmp_*"
+    - "plumed >=2.9.2 *${{ mpi_prefix }}_*"
+    - scalapack
+    - "sirius * *${{ mpi_prefix }}_*"
+    - "spfft * ${{ mpi_prefix }}_*" 
+    - "spla * ${{ mpi_prefix }}_*" 
+    - spglib
+#   - tblite
+    - trexio
     - if: mpi == "openmpi"
       then:
         - "elpa >=2024.05.001 *${{ mpi_prefix }}_*"
-        - "plumed >=2.9.2 *${{ mpi_prefix }}_*"
   run:
-    - ${{ mpi }} >=5
-    - "openblas >=0.3.30 *openmp_*"
+    - ${{ mpi }}
+    - "openblas * *openmp_*"
+    - "plumed >=2.9.2 *${{ mpi_prefix }}_*"
+    - "sirius * *${{ mpi_prefix }}_*"
+    - "spfft * ${{ mpi_prefix }}_*" 
+    - "spla * ${{ mpi_prefix }}_*" 
 
 tests:
+  # 1. Verify that the files exist in the bin directory
   - package_contents:
       bin:
         - cp2k.psmp
+        - cp2k.popt
+        - cp2k
+  # 2. Run commands to verify they execute successfully
+  - script:
+      - cp2k.psmp -v
+      - cp2k.popt -h
+      - cp2k -h
 
 about:
   homepage: https://www.cp2k.org
