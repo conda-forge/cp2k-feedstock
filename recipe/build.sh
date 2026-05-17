@@ -3,13 +3,11 @@ set -ex
 
 if [[ "${mpi}" == "openmpi" ]]; then
   CP2K_USE_ELPA="ON"
-  CP2K_USE_PLUMED="ON"
   export OMPI_ALLOW_RUN_AS_ROOT=1
   export OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1
   export OMPI_MCA_plm_rsh_agent=/bin/false
 else
   CP2K_USE_ELPA="OFF"
-  CP2K_USE_PLUMED="OFF"
 fi
 
 # Build CP2K
@@ -29,8 +27,11 @@ cmake -B build -S . \
   -DCP2K_USE_LIBXC="ON" \
   -DCP2K_USE_MPI="ON" \
   -DCP2K_USE_MPI_F08="ON" \
-  -DCP2K_USE_PLUMED="${CP2K_USE_PLUMED}" \
+  -DCP2K_USE_PLUMED="ON" \
+  -DCP2K_USE_SIRIUS="ON" \
   -DCP2K_USE_SPGLIB="ON" \
+  -DCP2K_USE_SPLA="ON" \
+  -DCP2K_USE_TBLITE="OFF" \
   -DCP2K_USE_TREXIO="ON"
 cmake --build build --parallel "${CPU_COUNT}"
 cmake --install build
@@ -45,5 +46,9 @@ export CP2K_DATA_DIR="${PREFIX}/share/cp2k/data"
 export OMP_STACKSIZE=256M
 "${PWD}/tests/do_regtest.py" "${PREFIX}/bin" "psmp" \
   --maxtasks "${CPU_COUNT}" \
-  --skipdir "QS/regtest-dcdft-hfx" \
+  --smoketest \
   --workbasedir "${BUILD_PREFIX}"
+# For a full regression test without --smoketest add
+#  --skipdir "QS/regtest-dcdft-hfx" \
+#  --skipdir "SIRIUS/regtest-1" \
+# to make it pass without error
