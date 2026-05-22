@@ -38,13 +38,14 @@ requirements:
     - hdf5
     - libint
     - libint-fortran-devel
+    - libtorch >=2.7.1
     - "libxc >=7.0.0 *cpu_*"
     - "openblas * *openmp_*"
     - "plumed >=2.9.2 *${{ mpi_prefix }}_*"
     - scalapack
     - "sirius * *${{ mpi_prefix }}_*"
-    - "spfft * ${{ mpi_prefix }}_*" 
-    - "spla * ${{ mpi_prefix }}_*" 
+    - "spfft * ${{ mpi_prefix }}_*"
+    - "spla * ${{ mpi_prefix }}_*"
     - spglib
 #   - tblite
     - trexio
@@ -56,8 +57,8 @@ requirements:
     - "openblas * *openmp_*"
     - "plumed >=2.9.2 *${{ mpi_prefix }}_*"
     - "sirius * *${{ mpi_prefix }}_*"
-    - "spfft * ${{ mpi_prefix }}_*" 
-    - "spla * ${{ mpi_prefix }}_*" 
+    - "spfft * ${{ mpi_prefix }}_*"
+    - "spla * ${{ mpi_prefix }}_*"
 
 tests:
   # 1. Verify that the files exist in the bin directory
@@ -79,9 +80,9 @@ about:
   license_file: LICENSE
   summary: Quantum chemistry and solid state physics software package
   description: |
-    CP2K is a quantum chemistry and solid state physics software package 
-    that can perform atomistic simulations of solid state, liquid, 
-    molecular, periodic, material, crystal, and biological systems. 
+    CP2K is a quantum chemistry and solid state physics software package
+    that can perform atomistic simulations of solid state, liquid,
+    molecular, periodic, material, crystal, and biological systems.
   documentation: https://manual.cp2k.org
   repository: https://github.com/cp2k/cp2k
 
