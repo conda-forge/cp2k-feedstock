@@ -38,7 +38,7 @@ requirements:
     - hdf5
     - libint
     - libint-fortran-devel
-    - libtorch >=2.7.1
+    - "libtorch >=2.7.1 *cpu_*"
     - "libxc >=7.0.0 *cpu_*"
     - "openblas * *openmp_*"
     - "plumed >=2.9.2 *${{ mpi_prefix }}_*"
