@@ -21,7 +21,14 @@ Current build status
 ====================
 
 
-<table>
+<table><tr>
+    <td>GitHub Actions</td>
+    <td>
+      <a href="https://github.com/conda-forge/cp2k-feedstock/actions/workflows/conda-build.yml">
+        <img src="https://github.com/conda-forge/cp2k-feedstock/actions/workflows/conda-build.yml/badge.svg?event=push&branch=main">
+      </a>
+    </td>
+  </tr>
 </table>
 
 Current release info
