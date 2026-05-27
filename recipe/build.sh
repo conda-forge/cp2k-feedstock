@@ -22,7 +22,6 @@ fi
 
 # Build CP2K
 export PKG_CONFIG_PATH="${PREFIX}/lib:${PKG_CONFIG_PATH}"
-
 cmake -B build -S . \
   -GNinja \
   -DCMAKE_BUILD_TYPE="Release" \
