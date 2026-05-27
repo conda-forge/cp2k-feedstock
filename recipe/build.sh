@@ -23,9 +23,6 @@ fi
 # Build CP2K
 export PKG_CONFIG_PATH="${PREFIX}/lib:${PKG_CONFIG_PATH}"
 
-# Apply MPI warnings fix patch
-patch -p0 < "${RECIPE_DIR}/fix_cp2k_mpi_warnings.patch"
-
 cmake -B build -S . \
   -GNinja \
   -DCMAKE_BUILD_TYPE="Release" \
