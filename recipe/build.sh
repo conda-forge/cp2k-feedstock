@@ -6,6 +6,16 @@ if [[ "${mpi}" == "openmpi" ]]; then
   export OMPI_ALLOW_RUN_AS_ROOT=1
   export OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1
   export OMPI_MCA_plm_rsh_agent=/bin/false
+  TARGET="$PREFIX/include/elpa_openmp/modules/modules"
+  if [ -d ${TARGET} ] ; then
+    echo "${TARGET} exists."
+  else
+    WORKDIR=$(realpath $(pwd))
+    cd $(dirname ${TARGET})
+    ln -s . modules
+    cd ${WORKDIR}
+    ls ${TARGET}
+  fi
 else
   CP2K_USE_ELPA="OFF"
 fi
