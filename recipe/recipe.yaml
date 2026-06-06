@@ -14,7 +14,7 @@ source:
     sha256: 4364c74bcffaa474bc234e11686b09550e4d06932acf2147a341e4f7679dd88e
 
 build:
-  number: 9
+  number: 10
   script: build.sh
   string: mpi_${{ mpi }}_h${{ hash }}_${{ build_number }}
   skip:
