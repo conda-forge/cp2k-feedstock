@@ -70,9 +70,10 @@ tests:
         - cp2k
   # 2. Run commands to verify they execute successfully
   - script:
-      - cp2k.psmp -v
-      - cp2k.popt -h
-      - cp2k -h
+      - if: linux
+        then: ldd ${PREFIX}/bin/cp2k.psmp
+      - ${PREFIX}/bin/cp2k.psmp -v
+      - ${PREFIX}/bin/cp2k.popt -h
 
 about:
   homepage: https://www.cp2k.org
