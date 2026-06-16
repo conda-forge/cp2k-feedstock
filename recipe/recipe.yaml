@@ -14,7 +14,7 @@ source:
     sha256: 4364c74bcffaa474bc234e11686b09550e4d06932acf2147a341e4f7679dd88e
 
 build:
-  number: 12
+  number: 13
   script: build.sh
   string: mpi_${{ mpi }}_h${{ hash }}_${{ build_number }}
   skip:
@@ -32,6 +32,7 @@ requirements:
     - pkg-config
   host:
     - ${{ mpi }}
+    - "cosma-scalapack * *${{ mpi_prefix }}_*"
     - "dbcsr >=2.9 *${{ mpi_prefix }}_*"
     - "fftw * *${{ mpi_prefix }}_*"
     - hdf5
@@ -54,6 +55,8 @@ requirements:
         - "elpa >=2024.05.001 *${{ mpi_prefix }}_*"
   run:
     - ${{ mpi }}
+    - "cosma-scalapack * *${{ mpi_prefix }}_*"
+    - "dbcsr >=2.9 *${{ mpi_prefix }}_*"
     - "fftw * *${{ mpi_prefix }}_*"
     - "libtorch >=2.7.1 *cpu_generic_*"
     - "openblas * *openmp_*"
@@ -88,5 +91,4 @@ extra:
   recipe-maintainers:
     - jan-janssen
     - oschuett
-    - ltalirz
     - mkrack
