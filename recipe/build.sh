@@ -28,6 +28,9 @@ else
   CP2K_USE_LIBXSMM="OFF"
   # Avoid trying to access /proc/self/statm on macOS
   export FFLAGS="-D__NO_STATM_ACCESS ${FFLAGS}"
+  # -- Apple Silicon + GCC: -march=native expands internally
+  # to -march=apple-m1 (invalid). Use -mcpu=native instead.
+  sed -i.bak "s#-march=native;-mtune=native#-mcpu=native#g" cmake/CompilerConfiguration.cmake
 fi
 
 
