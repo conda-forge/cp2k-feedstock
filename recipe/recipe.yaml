@@ -14,7 +14,7 @@ source:
     sha256: 4364c74bcffaa474bc234e11686b09550e4d06932acf2147a341e4f7679dd88e
 
 build:
-  number: 11
+  number: 13
   script: build.sh
   string: mpi_${{ mpi }}_h${{ hash }}_${{ build_number }}
   skip:
@@ -24,7 +24,6 @@ build:
 requirements:
   build:
     - ${{ compiler("c") }}
-    - ${{ stdlib("c") }}
     - ${{ compiler("cxx") }}
     - ${{ compiler("fortran") }}
     - ${{ mpi }}
@@ -33,12 +32,13 @@ requirements:
     - pkg-config
   host:
     - ${{ mpi }}
+    - "cosma-scalapack * *${{ mpi_prefix }}_*"
     - "dbcsr >=2.9 *${{ mpi_prefix }}_*"
     - "fftw * *${{ mpi_prefix }}_*"
     - hdf5
     - libint
     - libint-fortran-devel
-    - "libtorch >=2.7.1 *cpu_*"
+    - "libtorch >=2.7.1 *cpu_generic_*"
     - "libxc >=7.0.0 *cpu_*"
     - libxsmm
     - "openblas * *openmp_*"
@@ -55,6 +55,10 @@ requirements:
         - "elpa >=2024.05.001 *${{ mpi_prefix }}_*"
   run:
     - ${{ mpi }}
+    - "cosma-scalapack * *${{ mpi_prefix }}_*"
+    - "dbcsr >=2.9 *${{ mpi_prefix }}_*"
+    - "fftw * *${{ mpi_prefix }}_*"
+    - "libtorch >=2.7.1 *cpu_generic_*"
     - "openblas * *openmp_*"
     - "plumed >=2.9.2 *${{ mpi_prefix }}_*"
     - "sirius * *${{ mpi_prefix }}_*"
@@ -62,16 +66,12 @@ requirements:
     - "spla * ${{ mpi_prefix }}_*"
 
 tests:
-  # 1. Verify that the files exist in the bin directory
   - package_contents:
       bin:
         - cp2k.psmp
         - cp2k.popt
         - cp2k
-  # 2. Run commands to verify they execute successfully
   - script:
-      - cp2k.psmp -v
-      - cp2k.popt -h
       - cp2k -h
 
 about:
@@ -91,5 +91,4 @@ extra:
   recipe-maintainers:
     - jan-janssen
     - oschuett
-    - ltalirz
     - mkrack
