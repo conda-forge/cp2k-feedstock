@@ -20,6 +20,14 @@ else
   CP2K_USE_ELPA="OFF"
 fi
 
+if [[ "${target_platform}" == "linux-64" ]]; then
+  CP2K_USE_LIBXSMM="ON"
+  CP2K_USE_PLUMED="ON"
+else
+  CP2K_USE_LIBXSMM="OFF"
+  CP2K_USE_PLUMED="OFF"
+fi
+
 # Build CP2K
 export PKG_CONFIG_PATH="${PREFIX}/lib:${PKG_CONFIG_PATH}"
 cmake -B build -S . \
@@ -34,10 +42,10 @@ cmake -B build -S . \
   -DCP2K_USE_LIBINT2="ON" \
   -DCP2K_USE_LIBTORCH="ON" \
   -DCP2K_USE_LIBXC="ON" \
-  -DCP2K_USE_LIBXSMM="ON" \
+  -DCP2K_USE_LIBXSMM="${CP2K_USE_LIBXSMM}" \
   -DCP2K_USE_MPI="ON" \
   -DCP2K_USE_MPI_F08="ON" \
-  -DCP2K_USE_PLUMED="ON" \
+  -DCP2K_USE_PLUMED="${CP2K_USE_PLUMED}" \
   -DCP2K_USE_SIRIUS="ON" \
   -DCP2K_USE_SPGLIB="ON" \
   -DCP2K_USE_SPLA="ON" \
