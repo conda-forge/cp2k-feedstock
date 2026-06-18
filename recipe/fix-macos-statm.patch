@@ -3,19 +3,49 @@
 @@ -447,68 +447,130 @@
     SUBROUTINE m_memory(mem)
 
-
        INTEGER(KIND=int_8), OPTIONAL, INTENT(OUT)         :: mem
        INTEGER(KIND=int_8)                      :: mem_local
-
 
        ! __NO_STATM_ACCESS can be used to disable the stuff, if getpagesize
        ! lead to linking errors or /proc/self/statm can not be opened
        !
--#if defined(__NO_STATM_ACCESS)
--      mem_local = 0
-+#if defined(__NO_STATM_ACCESS)  ! Disabled by user
-+      mem_local = 0_int_8
-+
+#if defined(__NO_STATM_ACCESS)
+      mem_local = 0
+-#else
++#elif defined(__linux__)
++      ! Linux: read from /proc/self/statm
+       INTEGER(KIND=int_8)                      :: m1, m2, m3
+       CHARACTER(LEN=80) :: DATA
+       INTEGER :: iostat, i
+
+       ! the size of a page, might not be available everywhere
+       INTERFACE
+          FUNCTION getpagesize() BIND(C, name="getpagesize") RESULT(RES)
+             IMPORT
+             INTEGER(C_INT) :: RES
+          END FUNCTION getpagesize
+       END INTERFACE
+
+       ! reading from statm
+       !
+-      mem_local = -1
++      mem_local = -1_int_8
+       DATA = ""
+       OPEN (121245, FILE="/proc/self/statm", ACTION="READ", STATUS="OLD", ACCESS="STREAM")
+       DO I = 1, 80
+          READ (121245, END=999) DATA(I:I)
+       END DO
+ 999   CLOSE (121245)
+       DATA(I:80) = ""
+       ! m1 = total
+       ! m2 = resident
+       ! m3 = shared
+       READ (DATA, *, IOSTAT=iostat) m1, m2, m3
+       IF (iostat /= 0) THEN
+-         mem_local = 0
++         mem_local = 0_int_8
+       ELSE
+          mem_local = m2
 +#elif defined(__APPLE__)        ! macOS: use task_info via Mach kernel
 +      USE, INTRINSIC :: ISO_C_BINDING, ONLY: C_INT, C_SIZE_T, C_PTR, C_LOC
 +      IMPLICIT NONE
@@ -57,7 +87,6 @@
 +      ELSE
 +         mem_local = 0_int_8
 +      END IF
-+
 +#elif defined(_WIN32)           ! Windows: use GetProcessMemoryInfo
 +      USE, INTRINSIC :: ISO_C_BINDING, ONLY: C_INT, C_SIZE_T, C_INTPTR_T, C_LOC, C_PTR
 +      IMPLICIT NONE
@@ -98,43 +127,8 @@
 +      ELSE
 +         mem_local = 0_int_8
 +      END IF
-+
- #else
-+      ! Linux: read from /proc/self/statm
-       INTEGER(KIND=int_8)                      :: m1, m2, m3
-       CHARACTER(LEN=80) :: DATA
-       INTEGER :: iostat, i
-
-
-       ! the size of a page, might not be available everywhere
-       INTERFACE
-          FUNCTION getpagesize() BIND(C, name="getpagesize") RESULT(RES)
-             IMPORT
-             INTEGER(C_INT) :: RES
-          END FUNCTION getpagesize
-       END INTERFACE
-
-
-       ! reading from statm
-       !
--      mem_local = -1
-+      mem_local = -1_int_8
-       DATA = ""
-       OPEN (121245, FILE="/proc/self/statm", ACTION="READ", STATUS="OLD", ACCESS="STREAM")
-       DO I = 1, 80
-          READ (121245, END=999) DATA(I:I)
-       END DO
- 999   CLOSE (121245)
-       DATA(I:80) = ""
-       ! m1 = total
-       ! m2 = resident
-       ! m3 = shared
-       READ (DATA, *, IOSTAT=iostat) m1, m2, m3
-       IF (iostat /= 0) THEN
--         mem_local = 0
++#else
 +         mem_local = 0_int_8
-       ELSE
-          mem_local = m2
  #if defined(__STATM_TOTAL)
           mem_local = m1
  #endif
@@ -145,9 +139,7 @@
        END IF
  #endif
 
-
        m_memory_max = MAX(mem_local, m_memory_max)
        IF (PRESENT(mem)) mem = mem_local
-
 
     END SUBROUTINE m_memory
