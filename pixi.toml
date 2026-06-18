@@ -47,6 +47,54 @@ description = "Build cp2k-feedstock with variant linux_64_hdf52mpiopenmpi direct
 [tasks."inspect-linux_64_hdf52mpiopenmpi"]
 cmd = "inspect_artifacts --recipe-dir recipe -m .ci_support/linux_64_hdf52mpiopenmpi.yaml"
 description = "List contents of cp2k-feedstock packages built for variant linux_64_hdf52mpiopenmpi"
+[tasks."build-osx_64_hdf51.14.6mpimpich"]
+cmd = "rattler-build build --recipe recipe -m .ci_support/osx_64_hdf51.14.6mpimpich.yaml"
+description = "Build cp2k-feedstock with variant osx_64_hdf51.14.6mpimpich directly (without setup scripts)"
+[tasks."inspect-osx_64_hdf51.14.6mpimpich"]
+cmd = "inspect_artifacts --recipe-dir recipe -m .ci_support/osx_64_hdf51.14.6mpimpich.yaml"
+description = "List contents of cp2k-feedstock packages built for variant osx_64_hdf51.14.6mpimpich"
+[tasks."build-osx_64_hdf51.14.6mpiopenmpi"]
+cmd = "rattler-build build --recipe recipe -m .ci_support/osx_64_hdf51.14.6mpiopenmpi.yaml"
+description = "Build cp2k-feedstock with variant osx_64_hdf51.14.6mpiopenmpi directly (without setup scripts)"
+[tasks."inspect-osx_64_hdf51.14.6mpiopenmpi"]
+cmd = "inspect_artifacts --recipe-dir recipe -m .ci_support/osx_64_hdf51.14.6mpiopenmpi.yaml"
+description = "List contents of cp2k-feedstock packages built for variant osx_64_hdf51.14.6mpiopenmpi"
+[tasks."build-osx_64_hdf52mpimpich"]
+cmd = "rattler-build build --recipe recipe -m .ci_support/osx_64_hdf52mpimpich.yaml"
+description = "Build cp2k-feedstock with variant osx_64_hdf52mpimpich directly (without setup scripts)"
+[tasks."inspect-osx_64_hdf52mpimpich"]
+cmd = "inspect_artifacts --recipe-dir recipe -m .ci_support/osx_64_hdf52mpimpich.yaml"
+description = "List contents of cp2k-feedstock packages built for variant osx_64_hdf52mpimpich"
+[tasks."build-osx_64_hdf52mpiopenmpi"]
+cmd = "rattler-build build --recipe recipe -m .ci_support/osx_64_hdf52mpiopenmpi.yaml"
+description = "Build cp2k-feedstock with variant osx_64_hdf52mpiopenmpi directly (without setup scripts)"
+[tasks."inspect-osx_64_hdf52mpiopenmpi"]
+cmd = "inspect_artifacts --recipe-dir recipe -m .ci_support/osx_64_hdf52mpiopenmpi.yaml"
+description = "List contents of cp2k-feedstock packages built for variant osx_64_hdf52mpiopenmpi"
+[tasks."build-osx_arm64_hdf51.14.6mpimpich"]
+cmd = "rattler-build build --recipe recipe -m .ci_support/osx_arm64_hdf51.14.6mpimpich.yaml"
+description = "Build cp2k-feedstock with variant osx_arm64_hdf51.14.6mpimpich directly (without setup scripts)"
+[tasks."inspect-osx_arm64_hdf51.14.6mpimpich"]
+cmd = "inspect_artifacts --recipe-dir recipe -m .ci_support/osx_arm64_hdf51.14.6mpimpich.yaml"
+description = "List contents of cp2k-feedstock packages built for variant osx_arm64_hdf51.14.6mpimpich"
+[tasks."build-osx_arm64_hdf51.14.6mpiopenmpi"]
+cmd = "rattler-build build --recipe recipe -m .ci_support/osx_arm64_hdf51.14.6mpiopenmpi.yaml"
+description = "Build cp2k-feedstock with variant osx_arm64_hdf51.14.6mpiopenmpi directly (without setup scripts)"
+[tasks."inspect-osx_arm64_hdf51.14.6mpiopenmpi"]
+cmd = "inspect_artifacts --recipe-dir recipe -m .ci_support/osx_arm64_hdf51.14.6mpiopenmpi.yaml"
+description = "List contents of cp2k-feedstock packages built for variant osx_arm64_hdf51.14.6mpiopenmpi"
+[tasks."build-osx_arm64_hdf52mpimpich"]
+cmd = "rattler-build build --recipe recipe -m .ci_support/osx_arm64_hdf52mpimpich.yaml"
+description = "Build cp2k-feedstock with variant osx_arm64_hdf52mpimpich directly (without setup scripts)"
+[tasks."inspect-osx_arm64_hdf52mpimpich"]
+cmd = "inspect_artifacts --recipe-dir recipe -m .ci_support/osx_arm64_hdf52mpimpich.yaml"
+description = "List contents of cp2k-feedstock packages built for variant osx_arm64_hdf52mpimpich"
+[tasks."build-osx_arm64_hdf52mpiopenmpi"]
+cmd = "rattler-build build --recipe recipe -m .ci_support/osx_arm64_hdf52mpiopenmpi.yaml"
+description = "Build cp2k-feedstock with variant osx_arm64_hdf52mpiopenmpi directly (without setup scripts)"
+[tasks."inspect-osx_arm64_hdf52mpiopenmpi"]
+cmd = "inspect_artifacts --recipe-dir recipe -m .ci_support/osx_arm64_hdf52mpiopenmpi.yaml"
+description = "List contents of cp2k-feedstock packages built for variant osx_arm64_hdf52mpiopenmpi"
 
 [feature.smithy.dependencies]
 conda-smithy = "*"

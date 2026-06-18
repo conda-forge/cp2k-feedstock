@@ -19,9 +19,9 @@ fortran_compiler:
 fortran_compiler_version:
 - '14'
 hdf5:
-- '2'
+- 1.14.6
 macos_machine:
-- arm64-apple-darwin20.0.0
+- x86_64-apple-darwin13.4.0
 mpi:
 - mpich
 mpich:
@@ -29,7 +29,7 @@ mpich:
 openmpi:
 - '5'
 target_platform:
-- osx-arm64
+- osx-64
 zip_keys:
 - - c_compiler_version
   - cxx_compiler_version
