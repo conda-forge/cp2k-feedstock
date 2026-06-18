@@ -24,9 +24,12 @@ if [[ "${target_platform}" == "linux-64" ]]; then
   CP2K_USE_LIBXSMM="ON"
   CP2K_USE_PLUMED="ON"
 else
-  CP2K_USE_LIBXSMM="OFF"
   CP2K_USE_PLUMED="OFF"
+  CP2K_USE_LIBXSMM="OFF"
+  # Avoid trying to access /proc/self/statm on macOS
+  export FFLAGS="-D__NO_STATM_ACCESS ${FFLAGS}"
 fi
+
 
 # Build CP2K
 export PKG_CONFIG_PATH="${PREFIX}/lib:${PKG_CONFIG_PATH}"
