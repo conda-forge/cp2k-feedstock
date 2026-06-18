@@ -12,6 +12,8 @@ package:
 source:
   - url: https://github.com/${{ name }}/${{ name }}/releases/download/v${{ version }}/${{ name }}-${{ version }}.tar.bz2
     sha256: 4364c74bcffaa474bc234e11686b09550e4d06932acf2147a341e4f7679dd88e
+    patches:
+      - fix-macos-statm.patch
 
 build:
   number: 14

@@ -1,0 +1,153 @@
+--- a/src/base/machine.F
++++ b/src/base/machine.F
+@@ -447,68 +447,130 @@
+    SUBROUTINE m_memory(mem)
+
+
+       INTEGER(KIND=int_8), OPTIONAL, INTENT(OUT)         :: mem
+       INTEGER(KIND=int_8)                      :: mem_local
+
+
+       ! __NO_STATM_ACCESS can be used to disable the stuff, if getpagesize
+       ! lead to linking errors or /proc/self/statm can not be opened
+       !
+-#if defined(__NO_STATM_ACCESS)
+-      mem_local = 0
++#if defined(__NO_STATM_ACCESS)  ! Disabled by user
++      mem_local = 0_int_8
++
++#elif defined(__APPLE__)        ! macOS: use task_info via Mach kernel
++      USE, INTRINSIC :: ISO_C_BINDING, ONLY: C_INT, C_SIZE_T, C_PTR, C_LOC
++      IMPLICIT NONE
++      ! Constants from <mach/mach.h>
++      INTEGER(C_INT), PARAMETER :: TASK_BASIC_INFO = 5
++      INTEGER(C_INT), PARAMETER :: TASK_BASIC_INFO_COUNT = 10
++      ! Structure task_basic_info
++      TYPE, BIND(C) :: task_basic_info
++         INTEGER(C_INT)    :: suspend_count
++         INTEGER(C_SIZE_T) :: virtual_size
++         INTEGER(C_SIZE_T) :: resident_size
++         INTEGER(C_SIZE_T) :: total_time
++         INTEGER(C_SIZE_T) :: user_time
++         INTEGER(C_SIZE_T) :: system_time
++         INTEGER(C_INT)    :: policy
++      END TYPE task_basic_info
++      INTERFACE
++         FUNCTION mach_task_self() BIND(C, NAME="mach_task_self") RESULT(task)
++            USE ISO_C_BINDING, ONLY: C_INT
++            INTEGER(C_INT) :: task
++         END FUNCTION mach_task_self
++         FUNCTION task_info(task, flavor, info, count) &
++            BIND(C, NAME="task_info") RESULT(rc)
++            USE ISO_C_BINDING, ONLY: C_INT, C_PTR
++            INTEGER(C_INT), VALUE :: task
++            INTEGER(C_INT), VALUE :: flavor
++            TYPE(C_PTR), VALUE    :: info
++            TYPE(C_PTR), VALUE    :: count
++            INTEGER(C_INT)        :: rc
++         END FUNCTION task_info
++      END INTERFACE
++      INTEGER(C_INT) :: task, rc
++      TYPE(task_basic_info) :: info
++      INTEGER(C_INT), TARGET :: count = TASK_BASIC_INFO_COUNT
++      task = mach_task_self()
++      rc = task_info(task, TASK_BASIC_INFO, C_LOC(info), C_LOC(count))
++      IF (rc == 0) THEN
++         mem_local = INT(info%resident_size, KIND=int_8)
++      ELSE
++         mem_local = 0_int_8
++      END IF
++
++#elif defined(_WIN32)           ! Windows: use GetProcessMemoryInfo
++      USE, INTRINSIC :: ISO_C_BINDING, ONLY: C_INT, C_SIZE_T, C_INTPTR_T, C_LOC, C_PTR
++      IMPLICIT NONE
++      TYPE, BIND(C) :: PROCESS_MEMORY_COUNTERS
++         INTEGER(C_SIZE_T) :: cb
++         INTEGER(C_SIZE_T) :: PageFaultCount
++         INTEGER(C_SIZE_T) :: PeakWorkingSetSize
++         INTEGER(C_SIZE_T) :: WorkingSetSize
++         INTEGER(C_SIZE_T) :: QuotaPeakPagedPoolUsage
++         INTEGER(C_SIZE_T) :: QuotaPagedPoolUsage
++         INTEGER(C_SIZE_T) :: QuotaPeakNonPagedPoolUsage
++         INTEGER(C_SIZE_T) :: QuotaNonPagedPoolUsage
++         INTEGER(C_SIZE_T) :: PagefileUsage
++         INTEGER(C_SIZE_T) :: PeakPagefileUsage
++      END TYPE PROCESS_MEMORY_COUNTERS
++      INTERFACE
++         FUNCTION GetCurrentProcess() BIND(C, NAME="GetCurrentProcess") RESULT(h)
++            USE ISO_C_BINDING, ONLY: C_INTPTR_T
++            INTEGER(C_INTPTR_T) :: h
++         END FUNCTION GetCurrentProcess
++         FUNCTION GetProcessMemoryInfo(hProcess, ppsmemCounters, cb) &
++            BIND(C, NAME="GetProcessMemoryInfo") RESULT(iret)
++            USE ISO_C_BINDING, ONLY: C_INT, C_INTPTR_T, C_SIZE_T, C_PTR
++            INTEGER(C_INTPTR_T), VALUE :: hProcess
++            TYPE(C_PTR), VALUE         :: ppsmemCounters
++            INTEGER(C_SIZE_T), VALUE   :: cb
++            INTEGER(C_INT)             :: iret
++         END FUNCTION GetProcessMemoryInfo
++      END INTERFACE
++      INTEGER(C_INTPTR_T) :: hProcess
++      TYPE(PROCESS_MEMORY_COUNTERS) :: counters
++      INTEGER(C_INT) :: iret
++      counters%cb = STORAGE_SIZE(counters) / 8
++      hProcess = GetCurrentProcess()
++      iret = GetProcessMemoryInfo(hProcess, C_LOC(counters), counters%cb)
++      IF (iret /= 0) THEN
++         mem_local = INT(counters%WorkingSetSize, KIND=int_8)
++      ELSE
++         mem_local = 0_int_8
++      END IF
++
+ #else
++      ! Linux: read from /proc/self/statm
+       INTEGER(KIND=int_8)                      :: m1, m2, m3
+       CHARACTER(LEN=80) :: DATA
+       INTEGER :: iostat, i
+
+
+       ! the size of a page, might not be available everywhere
+       INTERFACE
+          FUNCTION getpagesize() BIND(C, name="getpagesize") RESULT(RES)
+             IMPORT
+             INTEGER(C_INT) :: RES
+          END FUNCTION getpagesize
+       END INTERFACE
+
+
+       ! reading from statm
+       !
+-      mem_local = -1
++      mem_local = -1_int_8
+       DATA = ""
+       OPEN (121245, FILE="/proc/self/statm", ACTION="READ", STATUS="OLD", ACCESS="STREAM")
+       DO I = 1, 80
+          READ (121245, END=999) DATA(I:I)
+       END DO
+ 999   CLOSE (121245)
+       DATA(I:80) = ""
+       ! m1 = total
+       ! m2 = resident
+       ! m3 = shared
+       READ (DATA, *, IOSTAT=iostat) m1, m2, m3
+       IF (iostat /= 0) THEN
+-         mem_local = 0
++         mem_local = 0_int_8
+       ELSE
+          mem_local = m2
+ #if defined(__STATM_TOTAL)
+          mem_local = m1
+ #endif
+ #if defined(__STATM_RESIDENT)
+          mem_local = m2
+ #endif
+          mem_local = mem_local*getpagesize()
+       END IF
+ #endif
+
+
+       m_memory_max = MAX(mem_local, m_memory_max)
+       IF (PRESENT(mem)) mem = mem_local
+
+
+    END SUBROUTINE m_memory
