@@ -32,6 +32,7 @@ requirements:
     - pkg-config
   host:
     - ${{ mpi }}
+    - cmake >=3.27
     - "cosma-scalapack * *${{ mpi_prefix }}_*"
     - "dbcsr >=2.9 *${{ mpi_prefix }}_*"
     - "fftw * *${{ mpi_prefix }}_*"
@@ -62,7 +63,9 @@ requirements:
     - "fftw * *${{ mpi_prefix }}_*"
     - "libtorch >=2.7.1 *cpu_generic_*"
     - "openblas * *openmp_*"
-    - "plumed >=2.9.2 *${{ mpi_prefix }}_*"
+    - if: linux
+      then:
+        - "plumed >=2.9.2 *${{ mpi_prefix }}_*"
     - "sirius * *${{ mpi_prefix }}_*"
     - "spfft * ${{ mpi_prefix }}_*"
     - "spla * ${{ mpi_prefix }}_*"
