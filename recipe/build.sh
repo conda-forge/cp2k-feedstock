@@ -30,19 +30,22 @@ else
   # Avoid trying to access /proc/self/statm on macOS
   export FFLAGS="-D__NO_STATM_ACCESS ${FFLAGS}"
 
-  # -- Apple Silicon + GCC: -march=native expands internally
-  # to -march=apple-m1 (invalid). Use -mcpu=native instead.
-  sed -i.bak "s#-march=native;-mtune=native#-mcpu=native#g" cmake/CompilerConfiguration.cmake
-
-  # fix for:
-  #   CMake Error: try_run() invoked in cross-compiling mode, please set the following cache variables appropriately:
-  # │ │    MPI_RUN_RESULT_CXX_libver_mpi_normal (advanced)
-  # │ │    MPI_RUN_RESULT_CXX_libver_mpi_normal__TRYRUN_OUTPUT (advanced)
-  # │ │ For details see $SRC_DIR/build/TryRunResults.cmake
   if [[ "${target_platform}" == "osx-arm64" ]]; then
+    # fix for:
+    #   CMake Error: try_run() invoked in cross-compiling mode, please set the following cache variables appropriately:
+    # │ │    MPI_RUN_RESULT_CXX_libver_mpi_normal (advanced)
+    # │ │    MPI_RUN_RESULT_CXX_libver_mpi_normal__TRYRUN_OUTPUT (advanced)
+    # │ │ For details see $SRC_DIR/build/TryRunResults.cmake
     CMAKE_ARGS="${CMAKE_ARGS} -DMPI_RUN_RESULT_CXX_libver_mpi_normal__TRYRUN_OUTPUT='' "
     CMAKE_ARGS="${CMAKE_ARGS} -DMPI_RUN_RESULT_CXX_libver_mpi_normal=0 "
+    MCPU="generic"
+  else
+    MCPU="native"
   fi
+
+  # -- Apple Silicon + GCC: -march=native expands internally
+  # to -march=apple-m1 (invalid). Use -mcpu=${MCPU} instead.
+  sed -i.bak "s#-march=native;-mtune=native#-mcpu=${MCPU}#g" cmake/CompilerConfiguration.cmake
 fi
 
 
