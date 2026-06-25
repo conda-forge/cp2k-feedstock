@@ -28,7 +28,9 @@ else
   CP2K_USE_LIBXSMM="OFF"
 
   # Avoid trying to access /proc/self/statm on macOS
+  #   Ref: https://github.com/cp2k/cp2k/pull/4677
   export FFLAGS="-D__NO_STATM_ACCESS ${FFLAGS}"
+  export FFLAGS="-D__MACOSX ${FFLAGS}"
 
   if [[ "${target_platform}" == "osx-arm64" ]]; then
     # fix for:
