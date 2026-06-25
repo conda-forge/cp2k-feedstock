@@ -39,9 +39,8 @@ else
   # │ │    MPI_RUN_RESULT_CXX_libver_mpi_normal (advanced)
   # │ │    MPI_RUN_RESULT_CXX_libver_mpi_normal__TRYRUN_OUTPUT (advanced)
   # │ │ For details see $SRC_DIR/build/TryRunResults.cmake
-  # export MPI_RUN_RESULT_CXX_libver_mpi_normal__TRYRUN_OUTPUT=""
-  # export MPI_RUN_RESULT_CXX_libver_mpi_normal=0
-
+  export MPI_RUN_RESULT_CXX_libver_mpi_normal__TRYRUN_OUTPUT=""
+  export MPI_RUN_RESULT_CXX_libver_mpi_normal=0
 fi
 
 
