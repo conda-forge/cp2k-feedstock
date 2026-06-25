@@ -39,8 +39,10 @@ else
   # │ │    MPI_RUN_RESULT_CXX_libver_mpi_normal (advanced)
   # │ │    MPI_RUN_RESULT_CXX_libver_mpi_normal__TRYRUN_OUTPUT (advanced)
   # │ │ For details see $SRC_DIR/build/TryRunResults.cmake
-  export MPI_RUN_RESULT_CXX_libver_mpi_normal__TRYRUN_OUTPUT=""
-  export MPI_RUN_RESULT_CXX_libver_mpi_normal=0
+  if [[ "${target_platform}" == "osx-arm64" ]]; then
+    CMAKE_ARGS="${CMAKE_ARGS} -DMPI_RUN_RESULT_CXX_libver_mpi_normal__TRYRUN_OUTPUT='' "
+    CMAKE_ARGS="${CMAKE_ARGS} -DMPI_RUN_RESULT_CXX_libver_mpi_normal=0 "
+  fi
 fi
 
 
