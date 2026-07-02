@@ -40,7 +40,7 @@ else
     # │ │ For details see $SRC_DIR/build/TryRunResults.cmake
     CMAKE_ARGS="${CMAKE_ARGS} -DMPI_RUN_RESULT_CXX_libver_mpi_normal__TRYRUN_OUTPUT='' "
     CMAKE_ARGS="${CMAKE_ARGS} -DMPI_RUN_RESULT_CXX_libver_mpi_normal=0 "
-    MCPU="generic"
+    MCPU="native"
   else
     MCPU="native"
   fi

@@ -20,6 +20,7 @@ build:
   skip:
     - win
     - aarch64
+    - osx and ${{ mpi }} == "mpich"
 
 requirements:
   build:
