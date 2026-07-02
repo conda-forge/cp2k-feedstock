@@ -14,12 +14,13 @@ source:
     sha256: 4364c74bcffaa474bc234e11686b09550e4d06932acf2147a341e4f7679dd88e
 
 build:
-  number: 13
+  number: 14
   script: build.sh
   string: mpi_${{ mpi }}_h${{ hash }}_${{ build_number }}
   skip:
-    - if: aarch64 or osx or win
-      then: true
+    - win
+    - aarch64
+    - osx and ${{ mpi }} == "mpich"
 
 requirements:
   build:
@@ -32,6 +33,7 @@ requirements:
     - pkg-config
   host:
     - ${{ mpi }}
+    - cmake >=3.27
     - "cosma-scalapack * *${{ mpi_prefix }}_*"
     - "dbcsr >=2.9 *${{ mpi_prefix }}_*"
     - "fftw * *${{ mpi_prefix }}_*"
@@ -40,16 +42,18 @@ requirements:
     - libint-fortran-devel
     - "libtorch >=2.7.1 *cpu_generic_*"
     - "libxc >=7.0.0 *cpu_*"
-    - libxsmm
     - "openblas * *openmp_*"
-    - "plumed >=2.9.2 *${{ mpi_prefix }}_*"
     - scalapack
     - "sirius * *${{ mpi_prefix }}_*"
     - "spfft * ${{ mpi_prefix }}_*"
     - "spla * ${{ mpi_prefix }}_*"
     - spglib
-#   - tblite
+    #   - tblite
     - trexio
+    - if: linux
+      then:
+        - libxsmm
+        - "plumed >=2.9.2 *${{ mpi_prefix }}_*"
     - if: mpi == "openmpi"
       then:
         - "elpa >=2024.05.001 *${{ mpi_prefix }}_*"
@@ -60,7 +64,9 @@ requirements:
     - "fftw * *${{ mpi_prefix }}_*"
     - "libtorch >=2.7.1 *cpu_generic_*"
     - "openblas * *openmp_*"
-    - "plumed >=2.9.2 *${{ mpi_prefix }}_*"
+    - if: linux
+      then:
+        - "plumed >=2.9.2 *${{ mpi_prefix }}_*"
     - "sirius * *${{ mpi_prefix }}_*"
     - "spfft * ${{ mpi_prefix }}_*"
     - "spla * ${{ mpi_prefix }}_*"
