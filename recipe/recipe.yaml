@@ -14,7 +14,14 @@ source:
     sha256: f9bd86f580f57a53a0768c0045d1417f9f9a1d66d851ed7f662f496200043373
 
 build:
-  number: 3
+  number: 4
+  # cp2k.F embeds the build prefix in a Fortran string literal via
+  # compiler_options(). Fortran literals are length-counted rather than
+  # NUL-terminated, so substituting the prefix at install time shifts the
+  # literals packed behind it and corrupts them.
+  prefix_detection:
+    ignore:
+      - bin/cp2k.psmp
   script: build.sh
   string: mpi_${{ mpi }}_h${{ hash }}_${{ build_number }}
   skip:
@@ -50,7 +57,7 @@ requirements:
     - "openblas * *openmp_*"
     - "plumed >=2.10 *${{ mpi_prefix }}_*"
     - scalapack
-    - "sirius >=7.11 *${{ mpi_prefix }}_*"
+    - "sirius >=7.11,<7.12 *${{ mpi_prefix }}_*"
     - "spfft >=1.1 ${{ mpi_prefix }}_*"
     - "spla >=1.6 ${{ mpi_prefix }}_*"
     - spglib >=2.7
@@ -69,7 +76,7 @@ requirements:
     - "libxsmm ==2.0.0"
     - "openblas * *openmp_*"
     - "plumed >=2.10 *${{ mpi_prefix }}_*"
-    - "sirius >=7.11 *${{ mpi_prefix }}_*"
+    - "sirius >=7.11,<7.12 *${{ mpi_prefix }}_*"
     - "spfft >=1.1 ${{ mpi_prefix }}_*"
     - "spla >=1.6 ${{ mpi_prefix }}_*"
     - trexio >=2.5
@@ -83,7 +90,7 @@ tests:
       lib:
         - libcp2k
   - script:
-      - cp2k -h
+      - cp2k -h -v
 
 about:
   homepage: https://www.cp2k.org
