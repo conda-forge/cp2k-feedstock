@@ -6,7 +6,7 @@ context:
   mpi_prefix: "mpi_${{ mpi }}"
 
 package:
-  name: ${{ name|lower }}
+  name: ${{ name }}
   version: ${{ version }}
 
 source:
@@ -14,9 +14,11 @@ source:
     sha256: f9bd86f580f57a53a0768c0045d1417f9f9a1d66d851ed7f662f496200043373
     patches:
       - compiler-options-nul.patch
+      - elpa-modules-include-dir.patch
 
 build:
-  number: 5
+  # Prefer the mpich variant over the openmpi variant in the solver
+  number: ${{ 6 + (100 if mpi == "mpich" else 0) }}
   script: build.sh
   string: mpi_${{ mpi }}_h${{ hash }}_${{ build_number }}
   skip:
@@ -36,7 +38,8 @@ requirements:
     - pkg-config
   host:
     - ${{ mpi }}
-    - libboost-python-devel
+    # Boost headers are required by the CMake config of libint2
+    - libboost-devel
     - "cosma-scalapack >=2.8 *${{ mpi_prefix }}_*"
     - "dbcsr >=2.10 *${{ mpi_prefix }}_*"
     - eigen
@@ -57,15 +60,16 @@ requirements:
     - "spla >=1.6 ${{ mpi_prefix }}_*"
     - spglib >=2.7
     # tblite
-    - trexio >=2.5
+    - trexio >=2.5,<2.7
     - zlib
+  ignore_run_exports:
+    from_package:
+      # CP2K does not link against the compiled Boost libraries
+      - libboost-devel
   run:
-    - ${{ mpi }}
     - "cosma-scalapack >=2.8 *${{ mpi_prefix }}_*"
-    - "dbcsr >=2.10 *${{ mpi_prefix }}_*"
     - "elpa >=2026.02.002 *${{ mpi_prefix }}_*"
-    - "fftw >=3.3 *${{ mpi_prefix }}_*"
-    - "hdf5 * *${{ mpi_prefix }}_*"
+    - "fftw * *${{ mpi_prefix }}_*"
     - "libtorch >=2.12 *cpu_generic_*"
     - "libxs ==1.0.0"
     - "libxsmm ==2.0.0"
@@ -74,7 +78,7 @@ requirements:
     - "sirius >=7.11,<7.12 *${{ mpi_prefix }}_*"
     - "spfft >=1.1 ${{ mpi_prefix }}_*"
     - "spla >=1.6 ${{ mpi_prefix }}_*"
-    - trexio >=2.5
+    - trexio >=2.5,<2.7
 
 tests:
   - package_contents:
@@ -86,10 +90,28 @@ tests:
         - libcp2k
   - script:
       - cp2k -h -v
+  - script:
+      # Allow mpiexec as root in CI (ignored by MPICH)
+      - export OMPI_ALLOW_RUN_AS_ROOT=1
+      - export OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1
+      - export OMPI_MCA_plm_rsh_agent=/bin/false
+      # Restrict UCX to TCP (disable high-performance transports)
+      - export UCX_TLS=self,tcp
+      # Run CP2K regression tests
+      - export CP2K_DATA_DIR="${PREFIX}/share/cp2k/data"
+      - export OMP_STACKSIZE=256M
+      - python tests/do_regtest.py "${PREFIX}/bin" psmp --maxtasks "${CPU_COUNT:-$(nproc)}" --smoketest --workbasedir "${PWD}/regtesting"
+    requirements:
+      run:
+        - python >=3.11
+    files:
+      source:
+        - src/grid/sample_tasks/
+        - tests/
 
 about:
   homepage: https://www.cp2k.org
-  license: GPL-2.0-only
+  license: GPL-2.0-or-later
   license_family: GPL
   license_file: LICENSE
   summary: Quantum chemistry and solid state physics software package

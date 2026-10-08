@@ -1,0 +1,33 @@
+From: Matthias Krack <matthias.krack@psi.ch>
+Subject: [PATCH] Avoid nonexistent ELPA include directory .../modules/modules
+
+The ELPA pkg-config Cflags may already contain the modules directory.
+Appending "/modules" to the whole include directory list then yields a
+nonexistent directory and triggers -Wmissing-include-dirs warnings.
+Add the modules subdirectory only for existing and not yet listed dirs.
+(Backported to v2026.2)
+---
+--- a/cmake/modules/FindElpa.cmake
++++ b/cmake/modules/FindElpa.cmake
+@@ -38,10 +38,18 @@
+     cp2k::ELPA::elpa PROPERTIES INTERFACE_LINK_LIBRARIES
+                                 "${CP2K_ELPA_LINK_LIBRARIES}")
+   if(CP2K_ELPA_INCLUDE_DIRS)
++    # Add the modules subdirectory of each include directory only if it exists
++    # and is not already listed (e.g. by the Cflags of the pkg-config file)
++    set(CP2K_ELPA_ALL_INCLUDE_DIRS ${CP2K_ELPA_INCLUDE_DIRS})
++    foreach(_dir IN LISTS CP2K_ELPA_INCLUDE_DIRS)
++      if(IS_DIRECTORY "${_dir}/modules")
++        list(APPEND CP2K_ELPA_ALL_INCLUDE_DIRS "${_dir}/modules")
++      endif()
++    endforeach()
++    list(REMOVE_DUPLICATES CP2K_ELPA_ALL_INCLUDE_DIRS)
+     set_target_properties(
+-      cp2k::ELPA::elpa
+-      PROPERTIES INTERFACE_INCLUDE_DIRECTORIES
+-                 "${CP2K_ELPA_INCLUDE_DIRS};${CP2K_ELPA_INCLUDE_DIRS}/modules")
++      cp2k::ELPA::elpa PROPERTIES INTERFACE_INCLUDE_DIRECTORIES
++                                  "${CP2K_ELPA_ALL_INCLUDE_DIRS}")
+   endif()
+ endif()
+ 
