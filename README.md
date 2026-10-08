@@ -5,7 +5,7 @@ Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/cp2k-feedstock/
 
 Home: https://www.cp2k.org/
 
-Package license: GPL-2.0-only
+Package license: GPL-2.0-or-later
 
 Summary: Quantum chemistry and solid state physics software package
 

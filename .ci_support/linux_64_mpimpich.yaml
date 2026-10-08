@@ -20,7 +20,7 @@ fortran_compiler:
 - gfortran
 fortran_compiler_version:
 - '15'
-libboost_python_devel:
+libboost_devel:
 - '1.90'
 mpi:
 - mpich

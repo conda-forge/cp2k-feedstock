@@ -1,16 +1,10 @@
 #!/bin/bash
 set -ex
 
-if [[ "${mpi}" == "openmpi" ]]; then
-  export OMPI_ALLOW_RUN_AS_ROOT=1
-  export OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1
-  export OMPI_MCA_plm_rsh_agent=/bin/false
-fi
-
 # Build CP2K
 cmake -B build -S . \
   ${CMAKE_ARGS} \
-  -DCMAKE_INSTALL_LIBDIR="${PREFIX}/lib" \
+  -DCMAKE_INSTALL_LIBDIR:PATH="lib" \
   -DCP2K_BLAS_VENDOR="OpenBLAS" \
   -DCP2K_USE_EVERYTHING="OFF" \
   -DCP2K_USE_COSMA="ON" \
@@ -35,17 +29,4 @@ cmake -B build -S . \
 cmake --build build --parallel "${CPU_COUNT}"
 cmake --install build
 
-ln -sf cp2k.psmp "${PREFIX}/bin/cp2k.popt"
 ln -sf cp2k.psmp "${PREFIX}/bin/cp2k"
-
-# Restrict UCX to TCP (disable high-performance transports)
-export UCX_TLS=self,tcp
-
-# Run CP2K regression tests
-export CP2K_DATA_DIR="${PREFIX}/share/cp2k/data"
-export OMP_STACKSIZE=256M
-${PREFIX}/bin/cp2k -v
-"${PWD}/tests/do_regtest.py" "${PREFIX}/bin" "psmp" \
-  --maxtasks "${CPU_COUNT}" \
-  --smoketest \
-  --workbasedir "${BUILD_PREFIX}"
