@@ -12,16 +12,11 @@ package:
 source:
   - url: https://github.com/${{ name }}/${{ name }}/releases/download/v${{ version }}/${{ name }}-${{ version }}.tar.bz2
     sha256: f9bd86f580f57a53a0768c0045d1417f9f9a1d66d851ed7f662f496200043373
+    patches:
+      - compiler-options-nul.patch
 
 build:
-  number: 4
-  # cp2k.F embeds the build prefix in a Fortran string literal via
-  # compiler_options(). Fortran literals are length-counted rather than
-  # NUL-terminated, so substituting the prefix at install time shifts the
-  # literals packed behind it and corrupts them.
-  prefix_detection:
-    ignore:
-      - bin/cp2k.psmp
+  number: 5
   script: build.sh
   string: mpi_${{ mpi }}_h${{ hash }}_${{ build_number }}
   skip:

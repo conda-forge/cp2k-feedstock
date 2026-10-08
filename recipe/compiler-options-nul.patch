@@ -1,0 +1,32 @@
+From efa9e2cf2f0e06700631b75887cf1b19038ce5b1 Mon Sep 17 00:00:00 2001
+From: Matthias Krack <matthias.krack@psi.ch>
+Date: Thu, 8 Oct 2026 11:26:02 +0200
+Subject: [PATCH] Add trailing NUL character to compiler options string
+
+The trailing NUL character bounds the in-place prefix replacement of
+package managers like conda to this string, which would otherwise shift
+and corrupt the subsequent string literals in the binary.
+(Backported to v2026.2)
+---
+--- a/src/start/cp2k.F
++++ b/src/start/cp2k.F
+@@ -330,12 +330,16 @@
+                WRITE (output_unit, "(T2,A)") cp2k_version, &
+                   "Source code revision "//TRIM(compile_revision), &
+                   TRIM(cp2k_flags())
+-               compiler_options_string = compiler_options()
++               ! The trailing NUL character bounds the in-place prefix replacement of
++               ! package managers like conda to this string, which would otherwise
++               ! shift and corrupt the subsequent string literals in the binary
++               compiler_options_string = compiler_options()//CHAR(0)
++               l = INDEX(compiler_options_string, CHAR(0)) - 1
+                WRITE (output_unit, "(T2,A,A)") "compiler: ", compiler_version()
+                WRITE (output_unit, "(T2,A)") "compiler options:"
+-               DO i = 0, (LEN(compiler_options_string) - 1)/68
++               DO i = 0, (l - 1)/68
+                   WRITE (output_unit, "(T4,A)") &
+-                     compiler_options_string(i*68 + 1:MIN(LEN(compiler_options_string), (i + 1)*68))
++                     compiler_options_string(i*68 + 1:MIN(l, (i + 1)*68))
+                END DO
+                DEALLOCATE (compiler_options_string)
+             END IF
