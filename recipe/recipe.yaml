@@ -18,11 +18,10 @@ source:
 
 build:
   # Prefer the mpich variant over the openmpi variant in the solver
-  number: ${{ 6 + (100 if mpi == "mpich" else 0) }}
+  number: ${{ 7 + (100 if mpi == "mpich" else 0) }}
   script: build.sh
   string: mpi_${{ mpi }}_h${{ hash }}_${{ build_number }}
   skip:
-    - aarch64
     - osx
     - win
 
