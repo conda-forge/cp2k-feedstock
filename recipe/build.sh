@@ -1,6 +1,17 @@
 #!/bin/bash
 set -ex
 
+# FindMPI cannot execute its try_run() checks when cross-compiling
+if [[ "${CONDA_BUILD_CROSS_COMPILATION:-}" == "1" ]]; then
+  CMAKE_ARGS="${CMAKE_ARGS} -DMPI_RUN_RESULT_C_libver_mpi_normal=0 -DMPI_RUN_RESULT_C_libver_mpi_normal__TRYRUN_OUTPUT="
+  CMAKE_ARGS="${CMAKE_ARGS} -DMPI_RUN_RESULT_CXX_libver_mpi_normal=0 -DMPI_RUN_RESULT_CXX_libver_mpi_normal__TRYRUN_OUTPUT="
+fi
+
+# The Release build type uses -march=native which is not supported for aarch64
+if [[ "${target_platform}" == "linux-aarch64" ]]; then
+  CMAKE_ARGS="${CMAKE_ARGS} -DCMAKE_BUILD_TYPE=Generic"
+fi
+
 # Build CP2K
 cmake -B build -S . \
   ${CMAKE_ARGS} \

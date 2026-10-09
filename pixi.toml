@@ -55,6 +55,24 @@ description = "Debug cp2k-feedstock with variant linux_64_mpiopenmpi directly (w
 [feature.build.tasks."inspect-linux_64_mpiopenmpi"]
 cmd = "inspect_artifacts --recipe-dir recipe -m .ci_support/linux_64_mpiopenmpi.yaml"
 description = "List contents of cp2k-feedstock packages built for variant linux_64_mpiopenmpi"
+[feature.build.tasks."build-linux_aarch64_mpimpich"]
+cmd = "rattler-build build --recipe recipe -m .ci_support/linux_aarch64_mpimpich.yaml --target-platform linux-aarch64"
+description = "Build cp2k-feedstock with variant linux_aarch64_mpimpich directly (without setup scripts)"
+[feature.build.tasks."debug-linux_aarch64_mpimpich"]
+cmd = "rattler-build debug setup --recipe recipe -m .ci_support/linux_aarch64_mpimpich.yaml --target-platform linux-aarch64"
+description = "Debug cp2k-feedstock with variant linux_aarch64_mpimpich directly (without setup scripts)"
+[feature.build.tasks."inspect-linux_aarch64_mpimpich"]
+cmd = "inspect_artifacts --recipe-dir recipe -m .ci_support/linux_aarch64_mpimpich.yaml"
+description = "List contents of cp2k-feedstock packages built for variant linux_aarch64_mpimpich"
+[feature.build.tasks."build-linux_aarch64_mpiopenmpi"]
+cmd = "rattler-build build --recipe recipe -m .ci_support/linux_aarch64_mpiopenmpi.yaml --target-platform linux-aarch64"
+description = "Build cp2k-feedstock with variant linux_aarch64_mpiopenmpi directly (without setup scripts)"
+[feature.build.tasks."debug-linux_aarch64_mpiopenmpi"]
+cmd = "rattler-build debug setup --recipe recipe -m .ci_support/linux_aarch64_mpiopenmpi.yaml --target-platform linux-aarch64"
+description = "Debug cp2k-feedstock with variant linux_aarch64_mpiopenmpi directly (without setup scripts)"
+[feature.build.tasks."inspect-linux_aarch64_mpiopenmpi"]
+cmd = "inspect_artifacts --recipe-dir recipe -m .ci_support/linux_aarch64_mpiopenmpi.yaml"
+description = "List contents of cp2k-feedstock packages built for variant linux_aarch64_mpiopenmpi"
 
 [environments]
 build = ["build"]
