@@ -18,7 +18,7 @@ source:
 
 build:
   # Prefer the mpich variant over the openmpi variant in the solver
-  number: ${{ 7 + (100 if mpi == "mpich" else 0) }}
+  number: ${{ 8 + (100 if mpi == "mpich" else 0) }}
   script: build.sh
   string: mpi_${{ mpi }}_h${{ hash }}_${{ build_number }}
   skip:
@@ -99,7 +99,10 @@ tests:
       # Run CP2K regression tests
       - export CP2K_DATA_DIR="${PREFIX}/share/cp2k/data"
       - export OMP_STACKSIZE=256M
-      - python tests/do_regtest.py "${PREFIX}/bin" psmp --maxtasks "${CPU_COUNT:-$(nproc)}" --smoketest --workbasedir "${PWD}/regtesting"
+      # Run only the unit tests for aarch64, because the smoke test is too slow under emulation
+      - if: aarch64
+        then: python tests/do_regtest.py "${PREFIX}/bin" psmp --maxtasks "${CPU_COUNT:-$(nproc)}" --skip_regtests --workbasedir "${PWD}/regtesting"
+        else: python tests/do_regtest.py "${PREFIX}/bin" psmp --maxtasks "${CPU_COUNT:-$(nproc)}" --smoketest --workbasedir "${PWD}/regtesting"
     requirements:
       run:
         - python >=3.11
