@@ -4,6 +4,8 @@ context:
   name: cp2k
   version: "2026.2"
   mpi_prefix: "mpi_${{ mpi }}"
+  # Prefer the mpich variant over the openmpi variant in the solver
+  build_number: ${{ 9 + (100 if mpi == "mpich" else 0) }}
 
 package:
   name: ${{ name }}
@@ -17,10 +19,9 @@ source:
       - elpa-modules-include-dir.patch
 
 build:
-  # Prefer the mpich variant over the openmpi variant in the solver
-  number: ${{ 8 + (100 if mpi == "mpich" else 0) }}
+  number: ${{ build_number }}
   script: build.sh
-  string: mpi_${{ mpi }}_h${{ hash }}_${{ build_number }}
+  string: ${{ mpi_prefix }}_h${{ hash }}_${{ build_number }}
   skip:
     - osx
     - win
@@ -31,7 +32,9 @@ requirements:
     - ${{ stdlib("c") }}
     - ${{ compiler("cxx") }}
     - ${{ compiler("fortran") }}
-    - ${{ mpi }}
+    # The MPI compiler wrappers are only needed in the build environment when cross-compiling
+    - if: build_platform != target_platform
+      then: ${{ mpi }}
     - cmake >=3.27
     - ninja >=1.13
     - pkg-config
@@ -70,6 +73,7 @@ requirements:
     - "elpa >=2026.02.002 *${{ mpi_prefix }}_*"
     - "fftw * *${{ mpi_prefix }}_*"
     - "libtorch >=2.12 *cpu_generic_*"
+    - "libxc >=7.0 *cpu_*"
     - "libxs ==1.0.0"
     - "libxsmm ==2.0.0"
     - "openblas * *openmp_*"
@@ -99,10 +103,10 @@ tests:
       # Run CP2K regression tests
       - export CP2K_DATA_DIR="${PREFIX}/share/cp2k/data"
       - export OMP_STACKSIZE=256M
-      # Run only the unit tests for aarch64, because the smoke test is too slow under emulation
-      - if: aarch64
-        then: python tests/do_regtest.py "${PREFIX}/bin" psmp --maxtasks "${CPU_COUNT:-$(nproc)}" --skip_regtests --workbasedir "${PWD}/regtesting"
-        else: python tests/do_regtest.py "${PREFIX}/bin" psmp --maxtasks "${CPU_COUNT:-$(nproc)}" --smoketest --workbasedir "${PWD}/regtesting"
+      # Run only the unit tests for linux-aarch64, because the smoke test is too slow under emulation
+      - if: target_platform == "linux-aarch64"
+        then: python tests/do_regtest.py "${PREFIX}/bin" psmp --maxtasks "${CPU_COUNT:-4}" --skip_regtests --workbasedir "${PWD}/regtesting"
+        else: python tests/do_regtest.py "${PREFIX}/bin" psmp --maxtasks "${CPU_COUNT:-4}" --smoketest --workbasedir "${PWD}/regtesting"
     requirements:
       run:
         - python >=3.11

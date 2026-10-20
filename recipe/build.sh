@@ -7,12 +7,12 @@ if [[ "${CONDA_BUILD_CROSS_COMPILATION:-}" == "1" ]]; then
   CMAKE_ARGS="${CMAKE_ARGS} -DMPI_RUN_RESULT_CXX_libver_mpi_normal=0 -DMPI_RUN_RESULT_CXX_libver_mpi_normal__TRYRUN_OUTPUT="
 fi
 
-# The Release build type uses -march=native which is not supported for aarch64
-if [[ "${target_platform}" == "linux-aarch64" ]]; then
-  CMAKE_ARGS="${CMAKE_ARGS} -DCMAKE_BUILD_TYPE=Generic"
-fi
+# The Release build type uses -march=native which would tie the binaries to the CPU of the build host
+CMAKE_ARGS="${CMAKE_ARGS} -DCMAKE_BUILD_TYPE=Generic"
 
 # Build CP2K
+# CMAKE_INSTALL_LIBDIR needs the PATH type, because the untyped value from CMAKE_ARGS
+# would be turned into a path relative to the work dir by the CACHE PATH definition of CP2K
 cmake -B build -S . \
   ${CMAKE_ARGS} \
   -DCMAKE_INSTALL_LIBDIR:PATH="lib" \
